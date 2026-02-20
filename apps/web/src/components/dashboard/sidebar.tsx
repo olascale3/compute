@@ -81,10 +81,19 @@ export function Sidebar({ orgName, plan }: { orgName: string; plan: string }) {
       </nav>
 
       {/* Footer */}
-      <div className="px-5 py-4 border-t border-[rgba(255,140,60,0.08)]">
+      <div className="px-5 py-4 border-t border-[rgba(255,140,60,0.08)] flex items-center justify-between">
         <a href="/" className="text-[10px] text-[#3d3935] hover:text-[#5a554e] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
           truecompute.io
         </a>
+        <form action="/api/auth/signout" method="POST">
+          <button
+            type="submit"
+            className="text-[10px] text-[#3d3935] hover:text-red-400 transition-colors cursor-pointer"
+            style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
+          >
+            Sign Out
+          </button>
+        </form>
       </div>
     </aside>
   );

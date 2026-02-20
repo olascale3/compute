@@ -5,10 +5,15 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { generateApiKey } from '@/lib/api-key';
 
 export async function POST(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseUrl.startsWith('https://') || !supabaseKey) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const cookieStore = await cookies();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() { return cookieStore.getAll(); },
@@ -31,7 +36,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Name and slug are required' }, { status: 400 });
   }
 
-  const admin = createAdminClient();
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
 
   // Check if user already has an org
   const { data: existing } = await admin

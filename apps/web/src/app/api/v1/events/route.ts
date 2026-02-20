@@ -5,7 +5,6 @@ import { calculateCost } from '@/lib/pricing/calculator';
 import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
-  // 1. Extract API key
   const authHeader = request.headers.get('authorization');
   if (!authHeader?.startsWith('Bearer tc_live_')) {
     return NextResponse.json({ error: 'Invalid API key format' }, { status: 401 });
@@ -14,7 +13,12 @@ export async function POST(request: NextRequest) {
   const apiKey = authHeader.slice(7);
   const keyHash = hashApiKey(apiKey);
 
-  const admin = createAdminClient();
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
 
   // 2. Validate API key
   const { data: keyRecord } = await admin

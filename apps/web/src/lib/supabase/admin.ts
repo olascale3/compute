@@ -1,9 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Service role client — bypasses RLS. Server-side only.
 export function createAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !url.startsWith('https://') || !key) {
+    throw new Error('Supabase admin not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+  }
+
+  return createClient(url, key);
 }

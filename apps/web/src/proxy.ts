@@ -4,15 +4,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 export default async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  // Skip if Supabase is not configured (build time)
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey ||
+      !supabaseUrl.startsWith('https://') ||
+      supabaseUrl === 'https://placeholder.supabase.co') {
     return supabaseResponse;
   }
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() {

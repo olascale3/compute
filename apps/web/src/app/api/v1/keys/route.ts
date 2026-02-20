@@ -5,10 +5,15 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { generateApiKey } from '@/lib/api-key';
 
 async function getAuthUser() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseUrl.startsWith('https://') || !supabaseKey) {
+    return null;
+  }
   const cookieStore = await cookies();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() { return cookieStore.getAll(); },
@@ -37,10 +42,20 @@ export async function GET() {
   const user = await getAuthUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const membership = await getUserOrg(user.id);
+  let membership;
+  try {
+    membership = await getUserOrg(user.id);
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
   if (!membership) return NextResponse.json({ error: 'No organization' }, { status: 404 });
 
-  const admin = createAdminClient();
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
   const { data: keys } = await admin
     .from('api_keys')
     .select('id, name, key_prefix, last_used_at, revoked_at, created_at')
@@ -54,7 +69,12 @@ export async function POST(request: NextRequest) {
   const user = await getAuthUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const membership = await getUserOrg(user.id);
+  let membership;
+  try {
+    membership = await getUserOrg(user.id);
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
   if (!membership) return NextResponse.json({ error: 'No organization' }, { status: 404 });
   if (!['owner', 'admin'].includes(membership.role)) {
     return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
@@ -64,7 +84,12 @@ export async function POST(request: NextRequest) {
   const name = body.name || 'Untitled';
 
   const { fullKey, prefix, hash } = generateApiKey();
-  const admin = createAdminClient();
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
 
   const { error } = await admin.from('api_keys').insert({
     org_id: membership.org_id,
@@ -84,7 +109,12 @@ export async function DELETE(request: NextRequest) {
   const user = await getAuthUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const membership = await getUserOrg(user.id);
+  let membership;
+  try {
+    membership = await getUserOrg(user.id);
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
   if (!membership) return NextResponse.json({ error: 'No organization' }, { status: 404 });
   if (!['owner', 'admin'].includes(membership.role)) {
     return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
@@ -94,7 +124,12 @@ export async function DELETE(request: NextRequest) {
   const keyId = searchParams.get('id');
   if (!keyId) return NextResponse.json({ error: 'Key ID required' }, { status: 400 });
 
-  const admin = createAdminClient();
+  let admin;
+  try {
+    admin = createAdminClient();
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
   const { error } = await admin
     .from('api_keys')
     .update({ revoked_at: new Date().toISOString() })

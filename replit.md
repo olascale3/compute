@@ -43,6 +43,7 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - `NEXT_PUBLIC_APP_URL` - Public app URL
 
 ## Recent Changes
+- 2026-02-20: End-to-end testing and hardening — Added URL validation to all Supabase clients (client.ts, server.ts, admin.ts, proxy.ts). Wrapped all createAdminClient() calls in try/catch returning 503. Added autocomplete attributes to auth forms. Enhanced signout to always clear sb- cookies. Fallback client uses localhost.invalid (non-routable) when Supabase unconfigured. All routes tested: landing 200, login 200, signup 200, dashboard 307, onboarding 200, health 200, API routes 401 when unauthenticated, 503 when Supabase unavailable.
 - 2026-02-20: Fixed deployment health checks — added custom server.mjs that returns 200 on both `/` and `/api/health` immediately during cold start. Renamed middleware.ts to proxy.ts (Next.js 16 convention). Added `force-static` to landing page. VM deployment with `node server.mjs` for run.
 - 2026-02-20: Fixed pnpm version mismatch (9.15.0 -> 10.12.4) to match system pnpm, added .npmrc and build script approvals, verified deployment config with standalone Next.js build
 - 2026-02-20: Removed standalone output mode from next.config.ts, switched to standard `next start` for production. VM deployment with `bash build.sh` for build and `next start -p 5000` for run. Health check at /api/health returns 200.
