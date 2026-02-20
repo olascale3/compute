@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrueCompute — Business Concept Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #06080c;
+    --bg-surface: #0b0e14;
+    --bg-card: rgba(255,255,255,0.022);
+    --border-subtle: rgba(255,140,60,0.08);
+    --border-accent: rgba(255,140,60,0.25);
+    --accent: #ff8c3c;
+    --accent-soft: #ffb87a;
+    --accent-glow: rgba(255,140,60,0.12);
+    --text-primary: #ddd8d0;
+    --text-secondary: #8a8379;
+    --text-muted: #5a554e;
+    --text-dim: #3d3935;
+    --blue: #4ea8c8;
+    --green: #3ec96a;
+    --purple: #9b5fbf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Grid lines */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,140,60,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,140,60,0.018) 1px, transparent 1px);
+    background-size: 72px 72px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  .header h1 {
+    font-size: clamp(38px, 6vw, 62px);
+    font-weight: 300;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.05;
+  }
+
+  .header-sub {
+    font-size: clamp(16px, 2.2vw, 21px);
+    color: var(--text-secondary);
+    font-style: italic;
+    max-width: 600px;
+    margin: 16px auto 0;
+    font-weight: 300;
+  }
+
+  /* ─── Navigation ─── */
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 48px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 9px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .nav-btn:hover {
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+  }
+
+  .nav-btn.active {
+    background: var(--accent-glow);
+    border-color: var(--border-accent);
+    color: var(--accent);
+  }
+
+  /* ─── Sections ─── */
+  .section {
+    display: none;
+    animation: fadeUp 0.45s ease both;
+  }
+
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: clamp(24px, 3.8vw, 34px);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  p.prose {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+  }
+
+  p.prose strong { color: var(--accent); font-weight: 600; }
+  p.prose em { color: var(--accent-soft); }
+
+  /* ─── Stat Cards ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 28px 0;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .stat-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* ─── Callout ─── */
+  .callout {
+    background: var(--accent-glow);
+    border-left: 3px solid var(--accent);
+    padding: 18px 22px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    font-style: italic;
+    margin: 28px 0;
+  }
+
+  .callout strong { color: var(--accent-soft); font-style: normal; }
+
+  /* ─── Feature Cards ─── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 28px 0;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 22px 18px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon { font-size: 28px; margin-bottom: 10px; }
+
+  .feature-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .feature-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+  }
+
+  /* ─── Code Block ─── */
+  .code-block {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid var(--border-accent);
+    border-radius: 10px;
+    padding: 26px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.95;
+    color: var(--text-muted);
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+
+  .code-block .comment { color: var(--accent); }
+  .code-block .keyword { color: #6ba4d4; }
+  .code-block .string { color: var(--green); }
+  .code-block .dim { color: #3a3530; }
+  .code-block .output { color: var(--accent-soft); }
+
+  /* ─── Integration chips ─── */
+  .integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 22px 0;
+  }
+
+  .integration-chip {
+    background: rgba(255,140,60,0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 14px;
+    transition: border-color 0.3s;
+  }
+
+  .integration-chip:hover { border-color: var(--border-accent); }
+
+  .integration-chip-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-soft);
+    margin-bottom: 4px;
+  }
+
+  .integration-chip-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ─── Revenue bars ─── */
+  .revenue-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    transition: all 0.2s;
+  }
+
+  .revenue-row:hover .revenue-name { color: var(--accent); }
+
+  .revenue-pct {
+    width: 48px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .revenue-body { flex: 1; }
+
+  .revenue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+
+  .revenue-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: color 0.2s;
+  }
+
+  .revenue-amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--accent-soft);
+  }
+
+  .revenue-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .revenue-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .revenue-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ─── Forces ─── */
+  .force-card {
+    display: flex;
+    gap: 18px;
+    padding: 22px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+  }
+
+  .force-card:hover { border-color: var(--border-accent); }
+
+  .force-card[data-color="orange"] { border-left: 3px solid var(--accent); }
+  .force-card[data-color="blue"] { border-left: 3px solid var(--blue); }
+  .force-card[data-color="green"] { border-left: 3px solid var(--green); }
+
+  .force-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px;
+    opacity: 0.4;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .force-card[data-color="orange"] .force-num,
+  .force-card[data-color="orange"] .force-title { color: var(--accent); }
+  .force-card[data-color="blue"] .force-num,
+  .force-card[data-color="blue"] .force-title { color: var(--blue); }
+  .force-card[data-color="green"] .force-num,
+  .force-card[data-color="green"] .force-title { color: var(--green); }
+
+  .force-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+
+  .force-body { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+
+  /* ─── Moat cards ─── */
+  .moat-card {
+    padding: 20px;
+    background: rgba(255,140,60,0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: border-color 0.3s;
+  }
+
+  .moat-card:hover { border-color: var(--border-accent); }
+
+  .moat-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .moat-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+  /* ─── Phase tabs ─── */
+  .phase-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 24px 0;
+  }
+
+  .phase-tab {
+    flex: 1;
+    padding: 12px 8px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.25s;
+  }
+
+  .phase-tab:hover { border-color: var(--border-subtle); }
+
+  .phase-tab .phase-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: color 0.25s;
+  }
+
+  .phase-tab .phase-time {
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 3px;
+    transition: color 0.25s;
+  }
+
+  .phase-tab.active-orange { background: rgba(255,140,60,0.08); border-color: rgba(255,140,60,0.3); }
+  .phase-tab.active-orange .phase-label { color: var(--accent); }
+  .phase-tab.active-orange .phase-time { color: var(--accent-soft); }
+
+  .phase-tab.active-blue { background: rgba(78,168,200,0.08); border-color: rgba(78,168,200,0.3); }
+  .phase-tab.active-blue .phase-label { color: var(--blue); }
+  .phase-tab.active-blue .phase-time { color: var(--blue); }
+
+  .phase-tab.active-purple { background: rgba(155,95,191,0.08); border-color: rgba(155,95,191,0.3); }
+  .phase-tab.active-purple .phase-label { color: var(--purple); }
+  .phase-tab.active-purple .phase-time { color: var(--purple); }
+
+  .phase-tab.active-green { background: rgba(62,201,106,0.08); border-color: rgba(62,201,106,0.3); }
+  .phase-tab.active-green .phase-label { color: var(--green); }
+  .phase-tab.active-green .phase-time { color: var(--green); }
+
+  /* Phase content */
+  .phase-content {
+    display: none;
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 26px;
+    animation: fadeUp 0.35s ease both;
+  }
+
+  .phase-content.active { display: block; }
+
+  .phase-content[data-color="orange"] { border: 1px solid rgba(255,140,60,0.15); border-left: 3px solid var(--accent); }
+  .phase-content[data-color="blue"] { border: 1px solid rgba(78,168,200,0.15); border-left: 3px solid var(--blue); }
+  .phase-content[data-color="purple"] { border: 1px solid rgba(155,95,191,0.15); border-left: 3px solid var(--purple); }
+  .phase-content[data-color="green"] { border: 1px solid rgba(62,201,106,0.15); border-left: 3px solid var(--green); }
+
+  .phase-heading {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .phase-content[data-color="orange"] .phase-heading { color: var(--accent); }
+  .phase-content[data-color="blue"] .phase-heading { color: var(--blue); }
+  .phase-content[data-color="purple"] .phase-heading { color: var(--purple); }
+  .phase-content[data-color="green"] .phase-heading { color: var(--green); }
+
+  .phase-timeline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .phase-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .phase-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .phase-content[data-color="orange"] .phase-dot { background: var(--accent); }
+  .phase-content[data-color="blue"] .phase-dot { background: var(--blue); }
+  .phase-content[data-color="purple"] .phase-dot { background: var(--purple); }
+  .phase-content[data-color="green"] .phase-dot { background: var(--green); }
+
+  .phase-item-text { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
+
+  /* Cost box */
+  .cost-box {
+    margin-top: 28px;
+    padding: 22px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cost-box-title {
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .cost-box-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ─── Footer ─── */
+  .footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  /* ─── Animations ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .wrapper { padding: 28px 16px 48px; }
+    .nav { gap: 4px; }
+    .nav-btn { padding: 7px 10px; font-size: 10px; }
+    .phase-tabs { flex-wrap: wrap; }
+    .phase-tab { min-width: calc(50% - 4px); }
+    .force-card { flex-direction: column; gap: 8px; }
+    .force-num { font-size: 22px; }
+    .revenue-header { flex-direction: column; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-tag">Business Concept Brief</div>
+    <h1>TrueCompute</h1>
+    <p class="header-sub">The full-stack cost intelligence platform for AI inference — dollars, carbon, water, and compliance in one pane of glass.</p>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <button class="nav-btn active" data-section="problem">⚡ The Problem</button>
+    <button class="nav-btn" data-section="solution">💎 The Solution</button>
+    <button class="nav-btn" data-section="how">⚙️ How It Works</button>
+    <button class="nav-btn" data-section="revenue">💰 Revenue Model</button>
+    <button class="nav-btn" data-section="market">🎯 Market Timing</button>
+    <button class="nav-btn" data-section="moat">🏰 Your Moat</button>
+    <button class="nav-btn" data-section="roadmap">🚀 Execution Plan</button>
+  </nav>
+
+  <!-- ═══════════ PROBLEM ═══════════ -->
+  <div class="section active" id="section-problem">
+    <h2 class="section-title">The $15B Blind Spot</h2>
+    <p class="prose">
+      That infographic — the "Cartography of Generative AI" — maps an entire hidden industrial supply chain. From Congolese cobalt mines to Google's 5.2 billion gallons of water consumption, from underpaid RLHF workers in Kenya to 82.6% of e-waste being landfilled. But here's what's striking: <strong>nobody building on top of these AI models has any visibility into this cost stack.</strong>
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">$15B</div>
+        <div class="stat-label">LLM API market in 2025</div>
+        <div class="stat-sub">Growing 150%+ YoY</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">88%</div>
+        <div class="stat-label">of orgs use AI operationally</div>
+        <div class="stat-sub">Only 18% have governance</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$492M</div>
+        <div class="stat-label">AI governance spend in 2026</div>
+        <div class="stat-sub">Projected to reach $1B by 2030</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">662%</div>
+        <div class="stat-label">higher true carbon footprint</div>
+        <div class="stat-sub">vs. what companies self-report</div>
+      </div>
+    </div>
+
+    <p class="prose">
+      Three converging forces create the opportunity: (1) AI inference costs are falling 50×/year but companies can't track actual spend across providers, (2) the EU AI Act hits full enforcement August 2, 2026 with fines up to 7% of global revenue, and (3) no tool exists that connects financial cost, environmental impact, and regulatory compliance into a single platform.
+    </p>
+
+    <div class="callout">
+      The gap: Companies running AI at scale have no way to answer the question — "What does each AI query <em>actually</em> cost us, in dollars, carbon, water, and compliance risk?"
+    </div>
+  </div>
+
+  <!-- ═══════════ SOLUTION ═══════════ -->
+  <div class="section" id="section-solution">
+    <h2 class="section-title">Full-Stack AI Cost Intelligence</h2>
+    <p class="prose">
+      TrueCompute is a SaaS platform that gives every company using AI APIs a real-time dashboard showing the <em>true</em> cost of their AI usage — not just the API bill, but the environmental footprint and regulatory compliance status of every query.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💵</div>
+        <div class="feature-title">Financial Intelligence</div>
+        <div class="feature-desc">Real-time cost tracking across 30+ AI providers. Per-model, per-feature, per-team spend attribution. Budget alerts and cost anomaly detection.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-title">Environmental Footprint</div>
+        <div class="feature-desc">Per-query energy (Wh), water (mL), and CO₂ (gCO₂e) estimates using Google's methodology + academic benchmarks. Cumulative impact dashboards.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚖️</div>
+        <div class="feature-title">Compliance Engine</div>
+        <div class="feature-desc">Auto-classify AI usage by EU AI Act risk tiers. Generate transparency documentation. Audit-ready logs for Article 50 requirements.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">Optimization Router</div>
+        <div class="feature-desc">AI-powered model switching recs. "Use Haiku for 70% of customer service queries → save $8K/mo + 2.1 tons CO₂."</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      Think of it as <strong>Datadog meets Climatiq meets EU AI Act compliance</strong> — purpose-built for the $15B AI inference market. No one is connecting all three layers today.
+    </div>
+  </div>
+
+  <!-- ═══════════ HOW ═══════════ -->
+  <div class="section" id="section-how">
+    <h2 class="section-title">Technical Architecture</h2>
+    <p class="prose">
+      TrueCompute integrates via lightweight SDK, API proxy, or browser extension into any AI-consuming application. It intercepts API calls (with zero latency overhead via async logging) and enriches them with cost, environmental, and compliance metadata.
+    </p>
+
+    <div class="code-block">
+      <div class="comment">// Integration: 3 lines of code</div>
+      <div><span class="keyword">import</span> { TrueCompute } <span class="keyword">from</span> <span class="string">'@truecompute/sdk'</span>;</div>
+      <div><span class="keyword">const</span> tc = <span class="keyword">new</span> TrueCompute({ apiKey: <span class="string">'tc_...'</span> });</div>
+      <div><span class="keyword">const</span> client = tc.wrap(anthropicClient); <span class="dim">// wraps any AI SDK</span></div>
+      <br>
+      <div class="comment">// Every call now tracked automatically:</div>
+      <div><span class="keyword">const</span> response = <span class="keyword">await</span> client.messages.create({ ... });</div>
+      <br>
+      <div class="dim">// TrueCompute dashboard now shows:</div>
+      <div class="output">// Cost: $0.0043 | Energy: 0.82 Wh | Water: 0.71 mL | CO₂: 0.09g</div>
+      <div class="output">// EU Risk Tier: Limited | Compliance: ✓ Article 50 ready</div>
+    </div>
+
+    <p class="prose">
+      The data pipeline enriches each API call with environmental multipliers (PUE, WUE, CIF) specific to each provider's data center regions, using published methodologies from Google Cloud research, academic papers, and Salesforce's AI Energy Score framework.
+    </p>
+
+    <div class="integrations-grid">
+      <div class="integration-chip">
+        <div class="integration-chip-title">SDK Wrapper</div>
+        <div class="integration-chip-desc">Python, Node.js, Go — wraps any AI client library</div>
+      </div>
+      <div class="integration-chip">
+        <div class="integration-chip-title">API Gateway Proxy</div>
+        <div class="integration-chip-desc">Drop-in proxy for OpenAI-compatible endpoints</div>
+      </div>
+      <div class="integration-chip">
+        <div class="integration-chip-title">Browser Extension</div>
+        <div class="integration-chip-desc">For teams using ChatGPT / Claude web interfaces</div>
+      </div>
+      <div class="integration-chip">
+        <div class="integration-chip-title">CI/CD Plugin</div>
+        <div class="integration-chip-desc">GitHub Actions integration for AI cost in PRs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ REVENUE ═══════════ -->
+  <div class="section" id="section-revenue">
+    <h2 class="section-title">Revenue Architecture</h2>
+    <p class="prose">
+      Four revenue streams, designed to compound. Start with SaaS subscriptions (proven model, predictable MRR), then layer compliance reports as the EU AI Act deadline approaches, optimization savings share for large accounts, and sustainability badges for marketing value.
+    </p>
+
+    <div style="margin: 28px 0;">
+      <div class="revenue-row">
+        <div class="revenue-pct">55%</div>
+        <div class="revenue-body">
+          <div class="revenue-header">
+            <span class="revenue-name">SaaS Subscriptions</span>
+            <span class="revenue-amount">$49–$499/mo</span>
+          </div>
+          <div class="revenue-bar-track"><div class="revenue-bar-fill" style="width: 55%;"></div></div>
+          <div class="revenue-desc">Tiered by API call volume. Free tier for indie devs, Enterprise for $160B+ ad platforms.</div>
+        </div>
+      </div>
+      <div class="revenue-row">
+        <div class="revenue-pct">25%</div>
+        <div class="revenue-body">
+          <div class="revenue-header">
+            <span class="revenue-name">Compliance Reports</span>
+            <span class="revenue-amount">$2K–$15K/report</span>
+          </div>
+          <div class="revenue-bar-track"><div class="revenue-bar-fill" style="width: 25%;"></div></div>
+          <div class="revenue-desc">EU AI Act pre-audit documentation packages. $492M governance market in 2026.</div>
+        </div>
+      </div>
+      <div class="revenue-row">
+        <div class="revenue-pct">12%</div>
+        <div class="revenue-body">
+          <div class="revenue-header">
+            <span class="revenue-name">Optimization Savings Share</span>
+            <span class="revenue-amount">10–15% of savings</span>
+          </div>
+          <div class="revenue-bar-track"><div class="revenue-bar-fill" style="width: 12%;"></div></div>
+          <div class="revenue-desc">Performance fee on cost reductions from intelligent model routing.</div>
+        </div>
+      </div>
+      <div class="revenue-row">
+        <div class="revenue-pct">8%</div>
+        <div class="revenue-body">
+          <div class="revenue-header">
+            <span class="revenue-name">Sustainability Badges</span>
+            <span class="revenue-amount">$199–$999/yr</span>
+          </div>
+          <div class="revenue-bar-track"><div class="revenue-bar-fill" style="width: 8%;"></div></div>
+          <div class="revenue-desc">Verified "Green AI" certification for marketing. Think "Powered by renewable AI."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      Target: <strong>$50K MRR by month 12.</strong> Path: 100 teams at $49/mo (dev tier) + 20 companies at $499/mo (pro tier) + 5 enterprise deals at $2K+/mo + compliance report revenue from EU AI Act deadline panic starting Q2 2026.
+    </div>
+  </div>
+
+  <!-- ═══════════ MARKET ═══════════ -->
+  <div class="section" id="section-market">
+    <h2 class="section-title">Why Now: Three Colliding Forces</h2>
+
+    <div style="margin: 28px 0;">
+      <div class="force-card" data-color="orange">
+        <div class="force-num">01</div>
+        <div>
+          <div class="force-title">The Inference Cost Explosion</div>
+          <div class="force-body">LLM inference prices fell 50×/year from 2022–2025, but total spend is skyrocketing as usage scales. Ramp data shows companies shifting $1 of freelancer spend to $0.03 of AI spend — but that AI spend is growing exponentially. Companies need cost attribution before it becomes their second-largest cloud bill. The $15B API market is projected to hit $50B+ by 2028.</div>
+        </div>
+      </div>
+      <div class="force-card" data-color="blue">
+        <div class="force-num">02</div>
+        <div>
+          <div class="force-title">EU AI Act Full Enforcement: Aug 2, 2026</div>
+          <div class="force-body">Only 18% of organizations have AI governance frameworks despite 88% using AI operationally. The AI governance market is projected at $492M in 2026 spending alone. Fines reach 7% of global annual turnover — higher than GDPR. Every company selling to EU customers needs compliance tooling yesterday.</div>
+        </div>
+      </div>
+      <div class="force-card" data-color="green">
+        <div class="force-num">03</div>
+        <div>
+          <div class="force-title">The Sustainability Transparency Mandate</div>
+          <div class="force-body">Google just published per-query environmental impact data. Salesforce launched AI Energy Score. Academic researchers benchmarked 30+ models on eco-efficiency. The EU AI Act requires energy/resource reporting. Companies' actual carbon footprints are 662% higher than self-reported. The market is moving from voluntary to mandatory disclosure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ MOAT ═══════════ -->
+  <div class="section" id="section-moat">
+    <h2 class="section-title">Why You, Ola</h2>
+    <p class="prose">
+      This business sits at the exact intersection of your experience and the market gap. Here's why your background makes you uniquely positioned:
+    </p>
+
+    <div style="margin: 24px 0;">
+      <div class="moat-card">
+        <div class="moat-title">Production Engineering at Scale</div>
+        <div class="moat-desc">You managed capacity and asset management for SharePoint Online — 8,700+ servers, global datacenters. TrueCompute is essentially a capacity management and cost attribution tool for AI infrastructure. You've built exactly this kind of observability before.</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">Enterprise Customer Relationships</div>
+        <div class="moat-desc">Your work with Mondelez, Hyatt, and other enterprise customers at Microsoft means you understand how large orgs make infrastructure purchasing decisions. The $499/mo+ Enterprise tier is your bread and butter.</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">Domain Portfolio Synergy</div>
+        <div class="moat-desc">Your existing domains (sellmyagents.com, trademyai.com) and AI marketplace research give you SEO and brand assets. TrueCompute.io would complement your portfolio strategy.</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">Interview-Ready Network</div>
+        <div class="moat-desc">Your active conversations with Meta (managing $160B+ ad revenue infrastructure) and Vercel give you direct insight into how the largest AI consumers think about cost, scale, and compliance. Whether you join one of them or build this — the knowledge compounds.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      Competitive landscape: Climatiq does carbon APIs. Helicone does LLM observability. OneTrust does governance. Flexprice does AI billing. <strong>Nobody connects all four layers.</strong> That's the moat — you build the Datadog of AI true cost before anyone else stitches it together.
+    </div>
+  </div>
+
+  <!-- ═══════════ ROADMAP ═══════════ -->
+  <div class="section" id="section-roadmap">
+    <h2 class="section-title">12-Month Execution Plan</h2>
+    <p class="prose">
+      Each phase builds on the last, adding a new revenue stream. Start lean with cost intelligence (proven demand), then layer environmental + compliance as differentiators.
+    </p>
+
+    <div class="phase-tabs" id="phaseTabs">
+      <div class="phase-tab active-orange" data-phase="0" data-color="orange">
+        <div class="phase-label">Phase 1</div>
+        <div class="phase-time">Months 1–3</div>
+      </div>
+      <div class="phase-tab" data-phase="1" data-color="blue">
+        <div class="phase-label">Phase 2</div>
+        <div class="phase-time">Months 3–6</div>
+      </div>
+      <div class="phase-tab" data-phase="2" data-color="purple">
+        <div class="phase-label">Phase 3</div>
+        <div class="phase-time">Months 6–9</div>
+      </div>
+      <div class="phase-tab" data-phase="3" data-color="green">
+        <div class="phase-label">Phase 4</div>
+        <div class="phase-time">Months 9–12</div>
+      </div>
+    </div>
+
+    <!-- Phase 0 -->
+    <div class="phase-content active" id="phase-0" data-color="orange">
+      <div class="phase-heading">API Cost Intelligence MVP</div>
+      <div class="phase-timeline">Months 1–3</div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Build browser extension + API that intercepts LLM API calls</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Track per-query cost, latency, token usage across providers</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Dashboard showing spend vs. budget with model-level breakdown</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Integrate pricing data from 15+ providers (OpenAI, Anthropic, Google, DeepSeek, etc.)</div></div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase-content" id="phase-1" data-color="blue">
+      <div class="phase-heading">Environmental Footprint Layer</div>
+      <div class="phase-timeline">Months 3–6</div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Add energy (Wh), water (mL), CO₂ (gCO₂e) estimates per query</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Use Google's published methodology + academic benchmarks (arxiv:2505.09598)</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Per-model eco-efficiency scores based on DEA analysis</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Cumulative environmental dashboard: "Your AI used 47L of water this month"</div></div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-content" id="phase-2" data-color="purple">
+      <div class="phase-heading">EU AI Act Compliance Module</div>
+      <div class="phase-timeline">Months 6–9</div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Auto-classify AI usage by EU AI Act risk tiers</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Generate Article 50 transparency documentation</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Energy/resource disclosure reports for GPAI compliance</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Audit-ready logs mapping to regulatory requirements</div></div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-content" id="phase-3" data-color="green">
+      <div class="phase-heading">Optimization Engine + Marketplace</div>
+      <div class="phase-timeline">Months 9–12</div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">AI model router: auto-switch queries to cheaper/greener models</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Projected savings dashboard: "Switch 40% of queries to Haiku → save $12K/mo + 3.2 tons CO₂"</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Verified "AI Sustainability Score" badges for company websites</div></div>
+      <div class="phase-item"><div class="phase-dot"></div><div class="phase-item-text">Partner marketplace for carbon offsets & renewable energy credits</div></div>
+    </div>
+
+    <div class="cost-box">
+      <div class="cost-box-title">Starting Cost Estimate</div>
+      <div class="cost-box-text">
+        Phase 1 MVP: ~$2K/mo (cloud infra + API costs) — buildable solo or with one co-founder.<br>
+        No VC required until Phase 3. Bootstrap-friendly with your technical depth.<br>
+        Can run alongside a full-time role — the SDK/proxy architecture is low-maintenance once deployed.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    TrueCompute — Business Concept Brief — Generated from "Cartography of Generative AI" analysis<br>
+    Sources: Gartner AI Governance 2026 · EU AI Act timeline · Google Cloud inference methodology · Ramp Economics Lab · Salesforce AI Energy Score · arxiv:2505.09598
+  </div>
+</div>
+
+<script>
+  // ─── Section Navigation ───
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.section;
+
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      const section = document.getElementById('section-' + target);
+      if (section) {
+        section.classList.remove('active');
+        void section.offsetWidth; // trigger reflow for animation
+        section.classList.add('active');
+      }
+    });
+  });
+
+  // ─── Phase Tabs ───
+  const colorClasses = ['active-orange', 'active-blue', 'active-purple', 'active-green'];
+
+  document.querySelectorAll('.phase-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = tab.dataset.phase;
+      const color = tab.dataset.color;
+
+      // Reset tabs
+      document.querySelectorAll('.phase-tab').forEach(t => {
+        colorClasses.forEach(c => t.classList.remove(c));
+      });
+      tab.classList.add('active-' + color);
+
+      // Reset content
+      document.querySelectorAll('.phase-content').forEach(p => p.classList.remove('active'));
+      const content = document.getElementById('phase-' + idx);
+      if (content) {
+        content.classList.remove('active');
+        void content.offsetWidth;
+        content.classList.add('active');
+      }
+    });
+  });
+
+  // ─── Animate revenue bars on section reveal ───
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.revenue-bar-fill').forEach(bar => {
+          const w = bar.style.width;
+          bar.style.width = '0%';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => { bar.style.width = w; });
+          });
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const revSection = document.getElementById('section-revenue');
+  if (revSection) observer.observe(revSection);
+</script>
+
+</body>
+</html>
