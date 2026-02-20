@@ -1,5 +1,4 @@
 #!/bin/bash
 set -e
-
 cd apps/web
-npx --yes next build
+pnpm exec next build
