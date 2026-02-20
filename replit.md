@@ -31,7 +31,7 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 ```
 
 ## Key Configuration
-- **Package Manager**: pnpm 9.15.0
+- **Package Manager**: pnpm 10.12.4
 - **Node.js**: v20
 - **Dev Server**: Port 5000 (Next.js dev)
 - **Production**: Next.js standalone build on port 5000
@@ -43,4 +43,5 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - `NEXT_PUBLIC_APP_URL` - Public app URL
 
 ## Recent Changes
+- 2026-02-20: Fixed pnpm version mismatch (9.15.0 -> 10.12.4) to match system pnpm, added .npmrc and build script approvals, verified deployment config with standalone Next.js build
 - 2026-02-20: Initial Replit setup — configured Next.js for port 5000, allowed all dev origins, set up environment variables and deployment config
