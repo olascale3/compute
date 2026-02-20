@@ -57,5 +57,5 @@ externalPort = 4200
 
 [deployment]
 deploymentTarget = "vm"
-run = ["bash", "-c", "cd apps/web && node server.mjs"]
+run = ["bash", "start.sh"]
 build = ["bash", "build.sh"]
