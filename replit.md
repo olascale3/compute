@@ -19,7 +19,7 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 │       │   ├── app/          # Next.js App Router pages & API routes
 │       │   ├── components/   # React components (dashboard UI)
 │       │   ├── lib/          # Utilities (Supabase clients, pricing, rate-limit)
-│       │   └── middleware.ts # Auth middleware
+│       │   └── proxy.ts      # Auth proxy (Next.js 16 convention)
 │       └── supabase/
 │           └── migrations/   # SQL migration files
 ├── packages/
@@ -34,7 +34,7 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - **Package Manager**: pnpm 10.12.4
 - **Node.js**: v20
 - **Dev Server**: Port 5000 (Next.js dev)
-- **Production**: `next start` on port 5000 (VM deployment)
+- **Production**: Custom server (`server.mjs`) with `node server.mjs` on port 5000 (VM deployment)
 
 ## Environment Variables
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
@@ -43,6 +43,7 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - `NEXT_PUBLIC_APP_URL` - Public app URL
 
 ## Recent Changes
+- 2026-02-20: Fixed deployment health checks — added custom server.mjs that returns 200 on both `/` and `/api/health` immediately during cold start. Renamed middleware.ts to proxy.ts (Next.js 16 convention). Added `force-static` to landing page. VM deployment with `node server.mjs` for run.
 - 2026-02-20: Fixed pnpm version mismatch (9.15.0 -> 10.12.4) to match system pnpm, added .npmrc and build script approvals, verified deployment config with standalone Next.js build
 - 2026-02-20: Removed standalone output mode from next.config.ts, switched to standard `next start` for production. VM deployment with `bash build.sh` for build and `next start -p 5000` for run. Health check at /api/health returns 200.
 - 2026-02-20: Initial Replit setup — configured Next.js for port 5000, allowed all dev origins, set up environment variables and deployment config

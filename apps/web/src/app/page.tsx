@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+export const dynamic = 'force-static';
+
 const providers = ['OpenAI', 'Anthropic', 'Google', 'DeepSeek', 'Mistral', '15+ more'];
 
 const features = [
