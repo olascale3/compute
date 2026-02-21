@@ -85,15 +85,13 @@ export function Sidebar({ orgName, plan }: { orgName: string; plan: string }) {
         <a href="/" className="text-[10px] text-[#3d3935] hover:text-[#5a554e] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
           truecompute.io
         </a>
-        <form action="/api/auth/signout" method="POST">
-          <button
-            type="submit"
-            className="text-[10px] text-[#3d3935] hover:text-red-400 transition-colors cursor-pointer"
-            style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
-          >
-            Sign Out
-          </button>
-        </form>
+        <a
+          href="/api/logout"
+          className="text-[10px] text-[#3d3935] hover:text-red-400 transition-colors cursor-pointer"
+          style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
+        >
+          Sign Out
+        </a>
       </div>
     </aside>
   );
