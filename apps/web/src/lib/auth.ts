@@ -9,6 +9,9 @@ const SESSION_TTL_DAYS = 30;
 interface User {
   id: string;
   email: string;
+  name?: string;
+  avatar_url?: string;
+  provider?: string;
 }
 
 interface Session {
@@ -32,12 +35,45 @@ export async function createUser(email: string, password: string): Promise<User>
   return user;
 }
 
+export async function findOrCreateOAuthUser(
+  provider: string,
+  providerId: string,
+  email: string,
+  name?: string,
+  avatarUrl?: string
+): Promise<User> {
+  const existing = await queryOne<User>(
+    'SELECT id, email, name, avatar_url, provider FROM users WHERE provider = $1 AND provider_id = $2',
+    [provider, providerId]
+  );
+  if (existing) return existing;
+
+  const byEmail = await queryOne<User>(
+    'SELECT id, email, name, avatar_url, provider FROM users WHERE email = $1',
+    [email.toLowerCase().trim()]
+  );
+  if (byEmail) {
+    await query(
+      'UPDATE users SET provider = $1, provider_id = $2, name = COALESCE($3, name), avatar_url = COALESCE($4, avatar_url) WHERE id = $5',
+      [provider, providerId, name || null, avatarUrl || null, byEmail.id]
+    );
+    return { ...byEmail, provider, name: name || byEmail.name, avatar_url: avatarUrl || byEmail.avatar_url };
+  }
+
+  const user = await queryOne<User>(
+    'INSERT INTO users (email, provider, provider_id, name, avatar_url) VALUES ($1, $2, $3, $4, $5) RETURNING id, email, name, avatar_url, provider',
+    [email.toLowerCase().trim(), provider, providerId, name || null, avatarUrl || null]
+  );
+  if (!user) throw new Error('Failed to create OAuth user');
+  return user;
+}
+
 export async function verifyCredentials(email: string, password: string): Promise<User | null> {
-  const row = await queryOne<{ id: string; email: string; password_hash: string }>(
+  const row = await queryOne<{ id: string; email: string; password_hash: string | null }>(
     'SELECT id, email, password_hash FROM users WHERE email = $1',
     [email.toLowerCase().trim()]
   );
-  if (!row) return null;
+  if (!row || !row.password_hash) return null;
   const valid = await bcrypt.compare(password, row.password_hash);
   if (!valid) return null;
   return { id: row.id, email: row.email };

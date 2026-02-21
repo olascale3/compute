@@ -62,11 +62,17 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - `DATABASE_URL` - PostgreSQL connection string (auto-provisioned by Replit)
 - `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` - PostgreSQL details
 - `NEXT_PUBLIC_APP_URL` - Public app URL
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` - Google OAuth credentials
+- `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` - GitHub OAuth credentials
 
 ## API Routes
-- `POST /api/auth/signup` - Create account
-- `POST /api/auth/login` - Sign in
+- `POST /api/auth/signup` - Create account (email/password)
+- `POST /api/auth/login` - Sign in (email/password)
 - `POST /api/auth/signout` - Sign out (clears session)
+- `GET /api/auth/google` - Start Google OAuth flow
+- `GET /api/auth/google/callback` - Google OAuth callback
+- `GET /api/auth/github` - Start GitHub OAuth flow
+- `GET /api/auth/github/callback` - GitHub OAuth callback
 - `GET /api/v1/usage?view=overview|providers|models|queries` - Cost analytics
 - `GET/POST/DELETE /api/v1/keys` - API key management
 - `GET/POST /api/v1/budgets` - Budget management
@@ -75,5 +81,6 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - `GET /api/health` - Health check
 
 ## Recent Changes
+- 2026-02-21: Added Google and GitHub OAuth sign-in. Social login buttons shown as primary option on login/signup pages, with email/password as secondary. OAuth users auto-linked by email to existing accounts.
 - 2026-02-21: MVP migration — Replaced non-functional Supabase with Replit PostgreSQL. Built custom auth layer (bcrypt + sessions). Rewrote all API routes to use PostgreSQL directly. Full end-to-end flow working: signup -> onboarding -> dashboard -> event ingestion -> cost analytics.
 - 2026-02-20: Initial Replit setup — configured Next.js for port 5000, deployment config, health checks
