@@ -1,89 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { getSessionUser, getUserOrg } from '@/lib/auth';
+import { query, queryOne } from '@/lib/db';
 import { generateApiKey } from '@/lib/api-key';
 
 export async function POST(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseUrl.startsWith('https://') || !supabaseKey) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseKey,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet) {
-          try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch {}
-        },
-      },
-    }
-  );
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const body = await request.json();
-  const { name, slug } = body;
-
-  if (!name || !slug) {
-    return NextResponse.json({ error: 'Name and slug are required' }, { status: 400 });
-  }
-
-  let admin;
   try {
-    admin = createAdminClient();
-  } catch {
-    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
-  }
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  // Check if user already has an org
-  const { data: existing } = await admin
-    .from('org_members')
-    .select('org_id')
-    .eq('user_id', user.id)
-    .limit(1)
-    .single();
+    const existing = await getUserOrg(user.id);
+    if (existing) {
+      return NextResponse.json({ error: 'You already have an organization' }, { status: 400 });
+    }
 
-  if (existing) {
-    return NextResponse.json({ error: 'You already have an organization' }, { status: 400 });
-  }
+    const body = await request.json();
+    const { name, slug } = body;
 
-  // Create org
-  const { data: org, error: orgError } = await admin
-    .from('organizations')
-    .insert({ name, slug })
-    .select()
-    .single();
+    if (!name || !slug) {
+      return NextResponse.json({ error: 'Name and slug are required' }, { status: 400 });
+    }
 
-  if (orgError) {
-    if (orgError.code === '23505') {
+    const org = await queryOne<{ id: string }>(
+      'INSERT INTO organizations (name, slug) VALUES ($1, $2) RETURNING id',
+      [name, slug]
+    );
+
+    if (!org) {
+      return NextResponse.json({ error: 'Failed to create organization' }, { status: 500 });
+    }
+
+    await query(
+      'INSERT INTO org_members (org_id, user_id, role) VALUES ($1, $2, $3)',
+      [org.id, user.id, 'owner']
+    );
+
+    const { fullKey, prefix, hash } = generateApiKey();
+    await query(
+      'INSERT INTO api_keys (org_id, name, key_prefix, key_hash) VALUES ($1, $2, $3, $4)',
+      [org.id, 'Default', prefix, hash]
+    );
+
+    return NextResponse.json({ orgId: org.id, apiKey: fullKey });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    if (message.includes('unique constraint') || message.includes('duplicate key')) {
       return NextResponse.json({ error: 'Organization slug already taken' }, { status: 409 });
     }
+    console.error('Onboard error:', message);
     return NextResponse.json({ error: 'Failed to create organization' }, { status: 500 });
   }
-
-  // Create membership
-  await admin.from('org_members').insert({
-    org_id: org.id,
-    user_id: user.id,
-    role: 'owner',
-  });
-
-  // Generate API key
-  const { fullKey, prefix, hash } = generateApiKey();
-  await admin.from('api_keys').insert({
-    org_id: org.id,
-    name: 'Default',
-    key_prefix: prefix,
-    key_hash: hash,
-  });
-
-  return NextResponse.json({ orgId: org.id, apiKey: fullKey });
 }

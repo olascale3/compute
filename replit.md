@@ -7,7 +7,8 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 - **Monorepo**: Turborepo with pnpm workspaces
 - **Frontend**: Next.js 16 app (apps/web) with Tailwind CSS v4, React 19
 - **SDK**: TypeScript SDK package (packages/sdk) for wrapping AI clients
-- **Database/Auth**: Supabase (external) for authentication and data storage
+- **Database**: Replit PostgreSQL (Neon-backed) for all data storage
+- **Auth**: Custom email/password auth with bcrypt + HTTP-only session cookies (no external auth provider)
 - **Build System**: Turbo for task orchestration, tsup for SDK bundling
 
 ## Project Structure
@@ -18,10 +19,13 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 │       ├── src/
 │       │   ├── app/          # Next.js App Router pages & API routes
 │       │   ├── components/   # React components (dashboard UI)
-│       │   ├── lib/          # Utilities (Supabase clients, pricing, rate-limit)
-│       │   └── proxy.ts      # Auth proxy (Next.js 16 convention)
-│       └── supabase/
-│           └── migrations/   # SQL migration files
+│       │   ├── lib/          # Utilities (db, auth, pricing, rate-limit)
+│       │   │   ├── db.ts     # PostgreSQL connection pool & query helpers
+│       │   │   ├── auth.ts   # Auth: signup, login, sessions, org membership
+│       │   │   ├── api-key.ts # API key generation & hashing
+│       │   │   └── pricing/  # Cost calculator & model pricing data
+│       │   └── proxy.ts      # Auth middleware (Next.js 16 convention)
+│       └── server.mjs        # Custom production server for health checks
 ├── packages/
 │   └── sdk/                  # @truecompute/sdk package
 │       └── src/              # SDK source (client, transport, wrappers)
@@ -30,21 +34,46 @@ TrueCompute is an AI cost intelligence platform that tracks the true cost of eve
 └── turbo.json                # Turbo task config
 ```
 
+## Database Schema
+- **users** - Email/password accounts (bcrypt hashed)
+- **sessions** - Session tokens (SHA-256 hashed, with expiry)
+- **organizations** - Teams/companies with unique slugs
+- **org_members** - User-org membership with roles (owner, admin, member)
+- **api_keys** - SDK API keys (SHA-256 hashed, prefix stored for display)
+- **events** - AI API call tracking (provider, model, tokens, cost, latency)
+- **budgets** - Monthly spending limits and alerts
+
+## Auth Flow
+1. User signs up via `/api/auth/signup` (creates user + session)
+2. Session token stored in `tc_session` HTTP-only cookie (30-day TTL)
+3. Middleware (`proxy.ts`) validates session for protected routes
+4. After signup, user creates org via `/onboarding` -> `/api/v1/onboard`
+5. Onboarding creates org + membership + default API key
+6. Dashboard accessible after org creation
+
 ## Key Configuration
 - **Package Manager**: pnpm 10.12.4
 - **Node.js**: v20
 - **Dev Server**: Port 5000 (Next.js dev)
 - **Production**: Custom server (`server.mjs`) with `node server.mjs` on port 5000 (VM deployment)
+- **Session Cookie**: `tc_session`, HTTP-only, SameSite=lax, 30-day expiry
 
 ## Environment Variables
-- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key
-- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
+- `DATABASE_URL` - PostgreSQL connection string (auto-provisioned by Replit)
+- `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` - PostgreSQL details
 - `NEXT_PUBLIC_APP_URL` - Public app URL
 
+## API Routes
+- `POST /api/auth/signup` - Create account
+- `POST /api/auth/login` - Sign in
+- `POST /api/auth/signout` - Sign out (clears session)
+- `GET /api/v1/usage?view=overview|providers|models|queries` - Cost analytics
+- `GET/POST/DELETE /api/v1/keys` - API key management
+- `GET/POST /api/v1/budgets` - Budget management
+- `POST /api/v1/onboard` - Create organization
+- `POST /api/v1/events` - Ingest AI API call events (SDK endpoint)
+- `GET /api/health` - Health check
+
 ## Recent Changes
-- 2026-02-20: End-to-end testing and hardening — Added URL validation to all Supabase clients (client.ts, server.ts, admin.ts, proxy.ts). Wrapped all createAdminClient() calls in try/catch returning 503. Added autocomplete attributes to auth forms. Enhanced signout to always clear sb- cookies. Fallback client uses localhost.invalid (non-routable) when Supabase unconfigured. All routes tested: landing 200, login 200, signup 200, dashboard 307, onboarding 200, health 200, API routes 401 when unauthenticated, 503 when Supabase unavailable.
-- 2026-02-20: Fixed deployment health checks — added custom server.mjs that returns 200 on both `/` and `/api/health` immediately during cold start. Renamed middleware.ts to proxy.ts (Next.js 16 convention). Added `force-static` to landing page. VM deployment with `node server.mjs` for run.
-- 2026-02-20: Fixed pnpm version mismatch (9.15.0 -> 10.12.4) to match system pnpm, added .npmrc and build script approvals, verified deployment config with standalone Next.js build
-- 2026-02-20: Removed standalone output mode from next.config.ts, switched to standard `next start` for production. VM deployment with `bash build.sh` for build and `next start -p 5000` for run. Health check at /api/health returns 200.
-- 2026-02-20: Initial Replit setup — configured Next.js for port 5000, allowed all dev origins, set up environment variables and deployment config
+- 2026-02-21: MVP migration — Replaced non-functional Supabase with Replit PostgreSQL. Built custom auth layer (bcrypt + sessions). Rewrote all API routes to use PostgreSQL directly. Full end-to-end flow working: signup -> onboarding -> dashboard -> event ingestion -> cost analytics.
+- 2026-02-20: Initial Replit setup — configured Next.js for port 5000, deployment config, health checks

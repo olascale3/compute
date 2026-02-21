@@ -1,104 +1,92 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { createAdminClient } from '@/lib/supabase/admin';
-import { startOfDay, startOfMonth, subDays } from 'date-fns';
-
-async function getAuthUser() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseUrl.startsWith('https://') || !supabaseKey) {
-    return null;
-  }
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseKey,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet) {
-          try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch {}
-        },
-      },
-    }
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
+import { getSessionUser, getUserOrg } from '@/lib/auth';
+import { query, queryOne } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
-  const user = await getAuthUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  let admin;
   try {
-    admin = createAdminClient();
-  } catch {
+    const user = await getSessionUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const membership = await getUserOrg(user.id);
+    if (!membership) return NextResponse.json({ error: 'No organization' }, { status: 404 });
+
+    const orgId = membership.org_id;
+    const { searchParams } = new URL(request.url);
+    const view = searchParams.get('view') || 'overview';
+    const days = Math.min(Math.max(parseInt(searchParams.get('days') || '30') || 30, 1), 365);
+
+    if (view === 'overview') {
+      const todaySpendRow = await queryOne<{ total: string }>(
+        `SELECT COALESCE(SUM(cost_usd), 0) as total FROM events WHERE org_id = $1 AND created_at >= date_trunc('day', NOW())`,
+        [orgId]
+      );
+      const monthSpendRow = await queryOne<{ total: string }>(
+        `SELECT COALESCE(SUM(cost_usd), 0) as total FROM events WHERE org_id = $1 AND created_at >= date_trunc('month', NOW())`,
+        [orgId]
+      );
+      const monthQueriesRow = await queryOne<{ count: string }>(
+        `SELECT COUNT(*) as count FROM events WHERE org_id = $1 AND created_at >= date_trunc('month', NOW())`,
+        [orgId]
+      );
+      const dailySpend = await query<{ day: string; total: string }>(
+        `SELECT date_trunc('day', created_at)::date as day, SUM(cost_usd) as total
+         FROM events WHERE org_id = $1 AND created_at >= NOW() - ($2 || ' days')::interval
+         GROUP BY day ORDER BY day`,
+        [orgId, String(days)]
+      );
+      const providerBreakdown = await query<{ provider: string; total: string; count: string }>(
+        `SELECT provider, SUM(cost_usd) as total, COUNT(*) as count
+         FROM events WHERE org_id = $1 AND created_at >= date_trunc('month', NOW())
+         GROUP BY provider ORDER BY total DESC`,
+        [orgId]
+      );
+
+      return NextResponse.json({
+        todaySpend: Number(todaySpendRow?.total ?? 0),
+        monthSpend: Number(monthSpendRow?.total ?? 0),
+        monthQueries: Number(monthQueriesRow?.count ?? 0),
+        dailySpend: dailySpend.map(d => ({ day: d.day, total: Number(d.total) })),
+        providerBreakdown: providerBreakdown.map(p => ({ provider: p.provider, total: Number(p.total), count: Number(p.count) })),
+      });
+    }
+
+    if (view === 'providers') {
+      const providers = await query<{ provider: string; total: string; count: string }>(
+        `SELECT provider, SUM(cost_usd) as total, COUNT(*) as count
+         FROM events WHERE org_id = $1 AND created_at >= NOW() - ($2 || ' days')::interval
+         GROUP BY provider ORDER BY total DESC`,
+        [orgId, String(days)]
+      );
+      return NextResponse.json({ providers: providers.map(p => ({ provider: p.provider, total: Number(p.total), count: Number(p.count) })) });
+    }
+
+    if (view === 'models') {
+      const models = await query<{ provider: string; model: string; total: string; count: string }>(
+        `SELECT provider, model, SUM(cost_usd) as total, COUNT(*) as count
+         FROM events WHERE org_id = $1 AND created_at >= NOW() - ($2 || ' days')::interval
+         GROUP BY provider, model ORDER BY total DESC`,
+        [orgId, String(days)]
+      );
+      return NextResponse.json({ models: models.map(m => ({ provider: m.provider, model: m.model, total: Number(m.total), count: Number(m.count) })) });
+    }
+
+    if (view === 'queries') {
+      const page = parseInt(searchParams.get('page') || '0');
+      const limit = 50;
+      const events = await query(
+        `SELECT * FROM events WHERE org_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+        [orgId, limit, page * limit]
+      );
+      const countRow = await queryOne<{ count: string }>(
+        'SELECT COUNT(*) as count FROM events WHERE org_id = $1',
+        [orgId]
+      );
+      return NextResponse.json({ queries: events, total: Number(countRow?.count ?? 0), page, limit });
+    }
+
+    return NextResponse.json({ error: 'Invalid view' }, { status: 400 });
+  } catch (err) {
+    console.error('Usage error:', err instanceof Error ? err.message : err);
     return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
   }
-
-  const { data: membership } = await admin
-    .from('org_members')
-    .select('org_id')
-    .eq('user_id', user.id)
-    .single();
-
-  if (!membership) return NextResponse.json({ error: 'No organization' }, { status: 404 });
-
-  const orgId = membership.org_id;
-  const { searchParams } = new URL(request.url);
-  const view = searchParams.get('view') || 'overview';
-  const days = parseInt(searchParams.get('days') || '30');
-  const since = subDays(new Date(), days).toISOString();
-
-  if (view === 'overview') {
-    const now = new Date();
-    const todayStart = startOfDay(now).toISOString();
-    const monthStart = startOfMonth(now).toISOString();
-
-    const [todayRes, monthRes, countRes, dailyRes, providerRes] = await Promise.all([
-      admin.from('events').select('cost_usd').eq('org_id', orgId).gte('created_at', todayStart),
-      admin.from('events').select('cost_usd').eq('org_id', orgId).gte('created_at', monthStart),
-      admin.from('events').select('id', { count: 'exact', head: true }).eq('org_id', orgId).gte('created_at', monthStart),
-      admin.rpc('get_daily_spend', { p_org_id: orgId, p_since: since }),
-      admin.rpc('get_provider_breakdown', { p_org_id: orgId, p_since: monthStart }),
-    ]);
-
-    const todaySpend = (todayRes.data ?? []).reduce((sum: number, e: { cost_usd: number }) => sum + Number(e.cost_usd), 0);
-    const monthSpend = (monthRes.data ?? []).reduce((sum: number, e: { cost_usd: number }) => sum + Number(e.cost_usd), 0);
-
-    return NextResponse.json({
-      todaySpend,
-      monthSpend,
-      monthQueries: countRes.count ?? 0,
-      dailySpend: dailyRes.data ?? [],
-      providerBreakdown: providerRes.data ?? [],
-    });
-  }
-
-  if (view === 'providers') {
-    const { data } = await admin.rpc('get_provider_breakdown', { p_org_id: orgId, p_since: since });
-    return NextResponse.json({ providers: data ?? [] });
-  }
-
-  if (view === 'models') {
-    const { data } = await admin.rpc('get_model_breakdown', { p_org_id: orgId, p_since: since });
-    return NextResponse.json({ models: data ?? [] });
-  }
-
-  if (view === 'queries') {
-    const page = parseInt(searchParams.get('page') || '0');
-    const limit = 50;
-    const { data, count } = await admin
-      .from('events')
-      .select('*', { count: 'exact' })
-      .eq('org_id', orgId)
-      .order('created_at', { ascending: false })
-      .range(page * limit, (page + 1) * limit - 1);
-
-    return NextResponse.json({ queries: data ?? [], total: count ?? 0, page, limit });
-  }
-
-  return NextResponse.json({ error: 'Invalid view' }, { status: 400 });
 }

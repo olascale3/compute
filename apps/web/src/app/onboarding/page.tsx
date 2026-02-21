@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
 import { slugify } from '@/lib/utils';
 
 export default function OnboardingPage() {
@@ -11,7 +10,6 @@ export default function OnboardingPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  const supabase = createClient();
 
   async function handleCreateOrg(e: React.FormEvent) {
     e.preventDefault();
@@ -19,10 +17,6 @@ export default function OnboardingPage() {
     setError('');
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      // Create org via API
       const res = await fetch('/api/v1/onboard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,7 +53,6 @@ export default function OnboardingPage() {
           </p>
         </div>
 
-        {/* Step indicator */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm ${
             step >= 1 ? 'bg-[#ff8c3c] text-[#06080c]' : 'bg-[rgba(255,140,60,0.12)] text-[#5a554e]'
