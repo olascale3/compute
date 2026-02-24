@@ -2,24 +2,6 @@ import Link from 'next/link';
 
 export const dynamic = 'force-static';
 
-const steps = [
-  {
-    number: '01',
-    title: 'Sign up & get your API key',
-    desc: 'Create a free account in 30 seconds. No credit card needed.',
-  },
-  {
-    number: '02',
-    title: 'Add 3 lines to your code',
-    desc: 'Wrap your existing AI client. Everything else stays the same.',
-  },
-  {
-    number: '03',
-    title: 'See every dollar in real time',
-    desc: 'Your dashboard lights up with cost, token, and latency data instantly.',
-  },
-];
-
 const plans = [
   {
     name: 'Free',
@@ -44,387 +26,483 @@ const plans = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
-      <header className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-        <span className="text-xl font-semibold tracking-tight text-[#1a1a1a]" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif' }}>
-          TrueCompute
-        </span>
-        <div className="flex items-center gap-6">
-          <a href="#how-it-works" className="text-sm text-[#666] hover:text-[#1a1a1a] transition-colors hidden sm:inline" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-            How It Works
-          </a>
-          <a href="#pricing" className="text-sm text-[#666] hover:text-[#1a1a1a] transition-colors hidden sm:inline" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-            Pricing
-          </a>
-          <Link href="/login" className="text-sm text-[#666] hover:text-[#1a1a1a] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-            Sign In
-          </Link>
-          <Link
-            href="/signup"
-            className="px-5 py-2.5 bg-[#1a1a1a] text-white font-medium text-sm rounded-full hover:bg-[#333] transition-colors"
-            style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
-          >
-            Get Started
-          </Link>
+    <div className="min-h-screen" style={{ background: '#0D1117', fontFamily: 'var(--font-inter), system-ui, sans-serif' }}>
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .hero-glow {
+          background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,140,60,0.15), transparent);
+        }
+        .card-glow:hover {
+          box-shadow: 0 0 40px rgba(255,140,60,0.08), 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .shimmer-text {
+          background: linear-gradient(90deg, #ff8c3c, #ffcb8e, #ff8c3c, #ffcb8e, #ff8c3c);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmer 6s linear infinite;
+        }
+        .marquee-track {
+          animation: marquee 30s linear infinite;
+        }
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl" style={{ background: 'rgba(13,17,23,0.8)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="text-lg font-bold text-white tracking-tight">
+              TrueCompute
+            </Link>
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#features" className="text-[13px] text-[#8b949e] hover:text-white transition-colors">Features</a>
+              <a href="#how-it-works" className="text-[13px] text-[#8b949e] hover:text-white transition-colors">How It Works</a>
+              <a href="#pricing" className="text-[13px] text-[#8b949e] hover:text-white transition-colors">Pricing</a>
+            </nav>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/login" className="text-[13px] text-[#8b949e] hover:text-white transition-colors">
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="px-5 py-2 text-[13px] font-semibold rounded-full transition-all hover:shadow-[0_0_20px_rgba(255,140,60,0.3)]"
+              style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}
+            >
+              Start for Free
+            </Link>
+          </div>
         </div>
       </header>
 
-      <section className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0ede8] mb-10">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-xs text-[#666]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-            Tracking costs for 15+ AI providers
-          </span>
-        </div>
-
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-light leading-[1.05] mb-8 text-[#1a1a1a]" style={{
-          fontFamily: 'var(--font-cormorant), Georgia, serif',
-          letterSpacing: '-2px',
-        }}>
-          Know what your<br />
-          <span className="italic">AI actually costs</span>
-        </h1>
-
-        <p className="text-lg text-[#888] max-w-xl mx-auto mb-12 leading-relaxed">
-          Every API call to OpenAI, Anthropic, or Google has a price.
-          TrueCompute tracks it all in one place — per query, per model, per cent.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
-          <Link
-            href="/signup"
-            className="px-10 py-4 bg-[#1a1a1a] text-white font-medium text-sm rounded-full hover:bg-[#333] transition-all hover:shadow-lg"
-            style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
-          >
-            Start Free
-          </Link>
-          <a
-            href="#how-it-works"
-            className="px-10 py-4 text-[#666] text-sm hover:text-[#1a1a1a] transition-colors"
-            style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
-          >
-            See how it works &darr;
-          </a>
-        </div>
-        <p className="text-xs text-[#bbb]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-          No credit card required &middot; 1,000 free queries/month
-        </p>
-      </section>
-
-      <section className="max-w-5xl mx-auto px-6 pb-24">
-        <div className="bg-white rounded-3xl border border-[#e8e5e0] shadow-[0_1px_3px_rgba(0,0,0,0.04),0_20px_60px_rgba(0,0,0,0.05)] overflow-hidden">
-          <div className="flex items-center gap-2 px-6 py-4 border-b border-[#f0ede8]">
-            <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-            <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-            <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
-            <span className="ml-4 text-xs text-[#bbb]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Dashboard</span>
+      <section className="relative pt-48 pb-8 hero-glow">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-10" style={{ background: 'rgba(255,140,60,0.08)', border: '1px solid rgba(255,140,60,0.15)' }}>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-[13px] text-[#8b949e]">Now tracking 15+ AI providers in real time</span>
           </div>
 
-          <div className="p-6 sm:p-8 bg-gradient-to-b from-[#FAFAF8] to-white">
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              {[
-                { label: "Today's Spend", value: '$4.82', color: '#1a1a1a' },
-                { label: 'This Month', value: '$127.43', color: '#1a1a1a' },
-                { label: 'API Calls', value: '3,847', color: '#1a1a1a' },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-white rounded-2xl border border-[#f0ede8] p-5 text-center">
-                  <p className="text-[11px] text-[#999] mb-2 uppercase tracking-wider" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{stat.label}</p>
-                  <p className="text-2xl sm:text-3xl font-bold" style={{ fontFamily: 'var(--font-jetbrains), monospace', color: stat.color }}>{stat.value}</p>
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] mb-8 tracking-tight" style={{ fontFamily: 'var(--font-inter), system-ui, -apple-system, sans-serif' }}>
+            <span className="text-white">Know what your AI</span>
+            <br />
+            <span className="shimmer-text">actually costs</span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-[#8b949e] max-w-2xl mx-auto mb-12 leading-relaxed">
+            Every API call to OpenAI, Anthropic, or Google has a price tag.
+            TrueCompute gives you the visibility to track every dollar, every token, every millisecond.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-5">
+            <Link
+              href="/signup"
+              className="px-8 py-4 text-sm font-semibold rounded-full transition-all hover:shadow-[0_0_30px_rgba(255,140,60,0.35)] hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}
+            >
+              Start for Free
+            </Link>
+            <a
+              href="#how-it-works"
+              className="px-8 py-4 text-sm text-[#8b949e] hover:text-white rounded-full transition-all"
+              style={{ border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              See How It Works
+            </a>
+          </div>
+          <p className="text-xs text-[#484f58] mb-20">No credit card required &middot; Free tier includes 1,000 queries/month</p>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="relative rounded-2xl overflow-hidden" style={{
+            background: 'linear-gradient(135deg, rgba(255,140,60,0.12), rgba(255,140,60,0.02))',
+            padding: '1px',
+          }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: '#161b22' }}>
+              <div className="flex items-center gap-2 px-5 py-3.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }}></div>
+                <div className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }}></div>
+                <div className="w-3 h-3 rounded-full" style={{ background: '#28c840' }}></div>
+                <span className="ml-4 text-xs text-[#484f58]">TrueCompute &mdash; Dashboard</span>
+              </div>
+
+              <div className="p-5 sm:p-8">
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  {[
+                    { label: "TODAY'S SPEND", value: '$4.82', sub: '+12% from yesterday', subColor: '#ff8c3c' },
+                    { label: 'THIS MONTH', value: '$127.43', sub: '64% of budget used', subColor: '#febc2e' },
+                    { label: 'API CALLS', value: '3,847', sub: '↑ 231 today', subColor: '#28c840' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="rounded-xl p-4 sm:p-5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <p className="text-[10px] text-[#484f58] uppercase tracking-widest mb-2">{stat.label}</p>
+                      <p className="text-xl sm:text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{stat.value}</p>
+                      <p className="text-[11px]" style={{ color: stat.subColor }}>{stat.sub}</p>
+                    </div>
+                  ))}
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                  <div className="sm:col-span-3 rounded-xl p-5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div className="flex items-center justify-between mb-5">
+                      <p className="text-[10px] text-[#484f58] uppercase tracking-widest">Spend Over Time</p>
+                      <span className="text-[10px] text-[#484f58] px-2 py-1 rounded" style={{ background: 'rgba(255,255,255,0.04)' }}>30 days</span>
+                    </div>
+                    <div className="flex items-end gap-[3px] h-24">
+                      {[18, 22, 12, 28, 35, 20, 42, 38, 25, 15, 30, 45, 32, 18, 40, 35, 22, 28, 50, 42, 30, 20, 38, 55, 45, 35, 25, 40, 48, 32].map((h, i) => (
+                        <div key={i} className="flex-1 rounded-t transition-all hover:opacity-100" style={{
+                          height: `${h}%`,
+                          background: i >= 27 ? 'linear-gradient(to top, #ff8c3c, #ffb87a)' : 'rgba(255,140,60,0.25)',
+                          opacity: i >= 27 ? 1 : 0.6,
+                        }}></div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2 rounded-xl p-5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <p className="text-[10px] text-[#484f58] uppercase tracking-widest mb-5">By Provider</p>
+                    <div className="space-y-3">
+                      {[
+                        { name: 'OpenAI', pct: 54, amount: '$68.21', color: '#10a37f' },
+                        { name: 'Anthropic', pct: 33, amount: '$42.15', color: '#d4a27a' },
+                        { name: 'Google', pct: 9, amount: '$12.07', color: '#4285f4' },
+                        { name: 'DeepSeek', pct: 3, amount: '$3.80', color: '#7c6ce0' },
+                        { name: 'Mistral', pct: 1, amount: '$1.20', color: '#ff7000' },
+                      ].map((p) => (
+                        <div key={p.name}>
+                          <div className="flex justify-between text-[11px] mb-1">
+                            <span className="text-[#8b949e]">{p.name}</span>
+                            <span className="text-white font-medium" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{p.amount}</span>
+                          </div>
+                          <div className="h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                            <div className="h-1.5 rounded-full" style={{ width: `${Math.max(p.pct, 4)}%`, background: p.color }}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 overflow-hidden" style={{ borderTop: '1px solid rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex items-center gap-12 marquee-track" style={{ width: 'max-content' }}>
+          {[...Array(2)].map((_, setIdx) => (
+            <div key={setIdx} className="flex items-center gap-12">
+              <span className="text-[11px] text-[#30363d] uppercase tracking-widest shrink-0 px-4">Works with</span>
+              {[
+                { name: 'OpenAI', color: '#10a37f' },
+                { name: 'Anthropic', color: '#d4a27a' },
+                { name: 'Google AI', color: '#4285f4' },
+                { name: 'DeepSeek', color: '#7c6ce0' },
+                { name: 'Mistral', color: '#ff7000' },
+                { name: 'Cohere', color: '#39a0ed' },
+                { name: 'Together AI', color: '#6ee7b7' },
+                { name: 'Groq', color: '#f97316' },
+                { name: 'Perplexity', color: '#22d3ee' },
+                { name: 'Replicate', color: '#ef4444' },
+              ].map((p) => (
+                <span key={`${setIdx}-${p.name}`} className="text-sm font-semibold shrink-0 opacity-50 hover:opacity-100 transition-opacity cursor-default" style={{ color: p.color }}>
+                  {p.name}
+                </span>
               ))}
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl border border-[#f0ede8] p-5">
-                <p className="text-[11px] text-[#999] mb-5 uppercase tracking-wider" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Cost by Provider</p>
-                <div className="space-y-4">
-                  {[
-                    { name: 'OpenAI', amount: '$68.21', pct: 54, color: '#10a37f' },
-                    { name: 'Anthropic', amount: '$42.15', pct: 33, color: '#c96442' },
-                    { name: 'Google', amount: '$12.07', pct: 9, color: '#4285f4' },
-                    { name: 'DeepSeek', amount: '$3.80', pct: 3, color: '#7c6ce0' },
-                    { name: 'Mistral', amount: '$1.20', pct: 1, color: '#ff7000' },
-                  ].map((p) => (
-                    <div key={p.name}>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-[#666]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{p.name}</span>
-                        <span className="text-[#1a1a1a] font-medium" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{p.amount}</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-[#f5f3ef]">
-                        <div className="h-2 rounded-full transition-all" style={{ width: `${Math.max(p.pct, 3)}%`, backgroundColor: p.color }}></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl border border-[#f0ede8] p-5">
-                <p className="text-[11px] text-[#999] mb-5 uppercase tracking-wider" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Recent Queries</p>
-                <div className="space-y-0">
-                  {[
-                    { model: 'gpt-4o', cost: '$0.0130', tokens: '2,800', latency: '1.2s', dotColor: '#10a37f' },
-                    { model: 'claude-3.5-sonnet', cost: '$0.0089', tokens: '1,450', latency: '0.9s', dotColor: '#c96442' },
-                    { model: 'gemini-1.5-pro', cost: '$0.0042', tokens: '3,200', latency: '1.8s', dotColor: '#4285f4' },
-                    { model: 'gpt-4o-mini', cost: '$0.0006', tokens: '890', latency: '0.4s', dotColor: '#10a37f' },
-                    { model: 'deepseek-chat', cost: '$0.0003', tokens: '620', latency: '0.3s', dotColor: '#7c6ce0' },
-                  ].map((q) => (
-                    <div key={q.model} className="flex items-center justify-between py-2.5 border-b border-[#f5f3ef] last:border-0">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: q.dotColor }}></span>
-                        <span className="text-xs text-[#444] truncate" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.model}</span>
-                      </div>
-                      <div className="flex gap-4 text-xs shrink-0">
-                        <span className="text-[#1a1a1a] font-medium" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.cost}</span>
-                        <span className="text-[#bbb] hidden sm:inline" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.tokens}</span>
-                        <span className="text-[#ccc]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.latency}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 border-y border-[#f0ede8]">
-        <div className="max-w-5xl mx-auto px-6 flex items-center justify-center flex-wrap gap-8 sm:gap-14">
-          <span className="text-[11px] text-[#ccc] uppercase tracking-wider" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Works with</span>
-          {[
-            { name: 'OpenAI', color: '#10a37f' },
-            { name: 'Anthropic', color: '#c96442' },
-            { name: 'Google', color: '#4285f4' },
-            { name: 'DeepSeek', color: '#7c6ce0' },
-            { name: 'Mistral', color: '#ff7000' },
-          ].map((p) => (
-            <span key={p.name} className="text-sm font-medium" style={{ fontFamily: 'var(--font-jetbrains), monospace', color: p.color }}>
-              {p.name}
-            </span>
           ))}
-          <span className="text-xs text-[#ccc]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+ 15 more</span>
         </div>
       </section>
 
-      <section className="max-w-4xl mx-auto px-6 py-28">
+      <section id="features" className="max-w-7xl mx-auto px-6 py-32">
         <div className="text-center mb-20">
-          <h2 className="text-3xl sm:text-4xl font-light text-[#1a1a1a] mb-4" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', letterSpacing: '-1px' }}>
-            Sound familiar?
+          <p className="text-[11px] text-[#ff8c3c] uppercase tracking-[5px] mb-5 font-semibold">Features</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
+            Built for answers, not guesswork
           </h2>
+          <p className="text-lg text-[#8b949e] max-w-xl mx-auto">
+            Everything you need to understand, control, and optimize your AI spending in one place.
+          </p>
         </div>
 
-        <div className="space-y-5 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {[
-            { before: 'Checking 5 different provider billing pages', after: 'One unified dashboard for all providers' },
-            { before: 'Guessing which AI model costs more', after: 'Exact per-query cost down to the fraction of a cent' },
-            { before: 'Surprise AI bills at end of month', after: 'Real-time budget alerts before you overspend' },
-            { before: 'No visibility into which feature drives cost', after: 'Granular breakdowns by model, team, and query' },
-          ].map((p, i) => (
-            <div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-3 sm:gap-6 items-center bg-white rounded-2xl border border-[#f0ede8] p-5 sm:p-6">
-              <div className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-red-50 text-red-400 flex items-center justify-center text-xs shrink-0">&#x2717;</span>
-                <p className="text-sm text-[#999] line-through" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{p.before}</p>
-              </div>
-              <div className="hidden sm:block">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            {
+              title: 'Real-Time Cost Tracking',
+              desc: 'See exactly what each API call costs the moment it happens. Per-query precision down to the fraction of a cent across every provider and model.',
+              icon: (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#ff8c3c"/><stop offset="1" stopColor="#ffcb8e"/></linearGradient></defs>
+                  <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
+              ),
+              gradient: 'rgba(255,140,60,0.06)',
+            },
+            {
+              title: 'Multi-Provider Dashboard',
+              desc: 'Stop tab-switching between billing pages. OpenAI, Anthropic, Google, DeepSeek, Mistral and 15+ providers unified in a single view.',
+              icon: (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#4285f4"/><stop offset="1" stopColor="#7eb8f0"/></linearGradient></defs>
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+              ),
+              gradient: 'rgba(66,133,244,0.06)',
+            },
+            {
+              title: 'Budget Alerts & Limits',
+              desc: 'Set monthly spending caps and get notified at 80% usage. Never be surprised by your AI bill again. Protect your budget automatically.',
+              icon: (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <defs><linearGradient id="g3" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#28c840"/><stop offset="1" stopColor="#6ee7b7"/></linearGradient></defs>
+                  <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+                </svg>
+              ),
+              gradient: 'rgba(40,200,64,0.06)',
+            },
+            {
+              title: 'Zero-Overhead SDK',
+              desc: 'Three lines of code. No latency impact. Telemetry fires asynchronously in the background. Your application performance stays untouched.',
+              icon: (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#febc2e"/><stop offset="1" stopColor="#fcd34d"/></linearGradient></defs>
+                  <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              ),
+              gradient: 'rgba(254,188,46,0.06)',
+            },
+          ].map((f) => (
+            <div
+              key={f.title}
+              className="rounded-2xl p-8 transition-all duration-300 card-glow group"
+              style={{ background: `linear-gradient(135deg, ${f.gradient}, transparent)`, border: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                {f.icon}
               </div>
-              <div className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center text-xs shrink-0">&#x2713;</span>
-                <p className="text-sm text-[#1a1a1a] font-medium" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{p.after}</p>
-              </div>
+              <h3 className="text-xl font-bold text-white mb-3">{f.title}</h3>
+              <p className="text-sm text-[#8b949e] leading-relaxed">{f.desc}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section id="how-it-works" className="bg-white py-28">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <p className="text-[11px] text-[#bbb] uppercase tracking-[4px] mb-4" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>How it works</p>
-            <h2 className="text-3xl sm:text-4xl font-light text-[#1a1a1a]" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', letterSpacing: '-1px' }}>
-              Up and running in 2 minutes
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
-            {steps.map((step, i) => (
-              <div key={step.number} className="relative text-center md:text-left">
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-6 left-[calc(50%+40px)] right-[calc(-50%+40px)] border-t border-dashed border-[#e0ddd8]"></div>
-                )}
-                <div className="w-12 h-12 rounded-full bg-[#FAFAF8] border border-[#e8e5e0] flex items-center justify-center mb-5 mx-auto md:mx-0">
-                  <span className="text-sm font-bold text-[#999]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{step.number}</span>
-                </div>
-                <h3 className="text-lg font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif' }}>{step.title}</h3>
-                <p className="text-xs text-[#999] leading-relaxed" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="max-w-2xl mx-auto bg-[#1a1a1a] rounded-2xl overflow-hidden shadow-xl">
-            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-[rgba(255,255,255,0.06)]">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]"></div>
-              <span className="ml-3 text-[10px] text-[#555]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>your-app.ts</span>
-            </div>
-            <div className="p-6" style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '13px', lineHeight: '2.1' }}>
-              <div className="text-[#555]">{'// npm install @truecompute/sdk'}</div>
-              <div className="mt-2">
-                <span className="text-[#7eb8e0]">import</span>{' '}
-                <span className="text-[#e0e0e0]">{'{ TrueCompute }'}</span>{' '}
-                <span className="text-[#7eb8e0]">from</span>{' '}
-                <span className="text-[#a8d8a8]">{`'@truecompute/sdk'`}</span>;
-              </div>
-              <div className="mt-1">
-                <span className="text-[#7eb8e0]">const</span>{' '}
-                <span className="text-[#e0e0e0]">tc</span>{' = '}
-                <span className="text-[#7eb8e0]">new</span>{' '}
-                <span className="text-[#e0e0e0]">TrueCompute</span>
-                <span className="text-[#888]">{'({ apiKey: '}</span>
-                <span className="text-[#a8d8a8]">{`'tc_live_...'`}</span>
-                <span className="text-[#888]">{' })'}</span>;
-              </div>
-              <div>
-                <span className="text-[#7eb8e0]">const</span>{' '}
-                <span className="text-[#e0e0e0]">openai</span>{' = '}
-                <span className="text-[#e0e0e0]">tc.wrap</span>
-                <span className="text-[#888]">(</span>
-                <span className="text-[#7eb8e0]">new</span>{' '}
-                <span className="text-[#e0e0e0]">OpenAI</span>
-                <span className="text-[#888]">());</span>
-              </div>
-              <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.06)]">
-                <span className="text-[#555]">{'// That\'s it. Use openai as normal.'}</span>
-              </div>
-              <div>
-                <span className="text-[#7eb8e0]">const</span>{' '}
-                <span className="text-[#e0e0e0]">res</span>{' = '}
-                <span className="text-[#7eb8e0]">await</span>{' '}
-                <span className="text-[#e0e0e0]">openai.chat.completions.create</span>
-                <span className="text-[#888]">({'{ ... }'})</span>;
-              </div>
-              <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.06)]">
-                <span className="text-[#febc2e]">{'// '}</span>
-                <span className="text-[#febc2e]">{'Dashboard shows: $0.0043 | 1,247 tokens | 892ms'}</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
       <section className="max-w-5xl mx-auto px-6 py-28">
-        <div className="text-center mb-16">
-          <p className="text-[11px] text-[#bbb] uppercase tracking-[4px] mb-4" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Features</p>
-          <h2 className="text-3xl sm:text-4xl font-light text-[#1a1a1a]" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', letterSpacing: '-1px' }}>
-            Everything you need to control AI spend
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {[
-            {
-              icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="1" x2="12" y2="23"></line>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-              ),
-              title: 'Per-Query Costs',
-              desc: 'See what each API call costs down to the fraction of a cent.',
-            },
-            {
-              icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="3" y1="9" x2="21" y2="9"></line>
-                  <line x1="9" y1="21" x2="9" y2="9"></line>
-                </svg>
-              ),
-              title: 'Unified Dashboard',
-              desc: 'All your AI providers in one view. No more tab-switching.',
-            },
-            {
-              icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 20V10"></path>
-                  <path d="M12 20V4"></path>
-                  <path d="M6 20v-6"></path>
-                </svg>
-              ),
-              title: 'Budget Alerts',
-              desc: 'Set limits. Get notified at 80%. No more surprise bills.',
-            },
-            {
-              icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polyline>
-                </svg>
-              ),
-              title: 'Zero Overhead',
-              desc: 'No latency. Telemetry fires in the background silently.',
-            },
-          ].map((f) => (
-            <div key={f.title} className="bg-white rounded-2xl border border-[#f0ede8] p-6 hover:border-[#ddd8d0] hover:shadow-md transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-[#FAFAF8] border border-[#f0ede8] flex items-center justify-center mb-5 text-[#999] group-hover:text-[#1a1a1a] group-hover:border-[#ddd8d0] transition-colors">
-                {f.icon}
-              </div>
-              <h3 className="text-base font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif' }}>{f.title}</h3>
-              <p className="text-xs text-[#999] leading-relaxed" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{f.desc}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-[11px] text-[#ff8c3c] uppercase tracking-[5px] mb-5 font-semibold">The Problem</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-6">
+              AI costs are invisible until the bill arrives
+            </h2>
+            <p className="text-[#8b949e] mb-10 leading-relaxed">
+              You use multiple AI providers. Each has its own billing page that shows totals, not per-query costs.
+              You can&apos;t compare models, you can&apos;t track by feature, and you only find out you overspent after it&apos;s too late.
+            </p>
+            <div className="space-y-5">
+              {[
+                { before: '5 billing dashboards to check', after: 'One unified view' },
+                { before: 'No idea which model costs more', after: 'Per-query cost comparison' },
+                { before: 'Surprise bills every month', after: 'Real-time budget alerts' },
+                { before: 'Can\'t attribute cost to features', after: 'Granular breakdowns' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px]" style={{ background: 'rgba(255,80,80,0.1)', color: '#ff5050' }}>&#x2717;</span>
+                    <span className="text-sm text-[#484f58] line-through truncate">{item.before}</span>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0"><path d="M3 8h10m0 0l-3-3m3 3l-3 3" stroke="#30363d" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px]" style={{ background: 'rgba(40,200,64,0.1)', color: '#28c840' }}>&#x2713;</span>
+                    <span className="text-sm text-white font-medium truncate">{item.after}</span>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <p className="text-[10px] text-[#484f58] uppercase tracking-widest mb-5">Live Query Feed</p>
+            <div className="space-y-2">
+              {[
+                { model: 'gpt-4o', cost: '$0.0130', tokens: '2,800 tok', time: '1.2s', dot: '#10a37f' },
+                { model: 'claude-3.5-sonnet', cost: '$0.0089', tokens: '1,450 tok', time: '0.9s', dot: '#d4a27a' },
+                { model: 'gemini-1.5-pro', cost: '$0.0042', tokens: '3,200 tok', time: '1.8s', dot: '#4285f4' },
+                { model: 'gpt-4o-mini', cost: '$0.0006', tokens: '890 tok', time: '0.4s', dot: '#10a37f' },
+                { model: 'claude-3-haiku', cost: '$0.0003', tokens: '620 tok', time: '0.3s', dot: '#d4a27a' },
+                { model: 'deepseek-chat', cost: '$0.0002', tokens: '1,100 tok', time: '0.6s', dot: '#7c6ce0' },
+                { model: 'mistral-large', cost: '$0.0058', tokens: '1,800 tok', time: '1.1s', dot: '#ff7000' },
+              ].map((q) => (
+                <div key={q.model} className="flex items-center justify-between py-2.5 rounded-lg px-3 hover:bg-[rgba(255,255,255,0.03)] transition-colors" style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ background: q.dot }}></span>
+                    <span className="text-[12px] text-[#c9d1d9]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.model}</span>
+                  </div>
+                  <div className="flex gap-5 text-[11px]">
+                    <span className="text-[#ff8c3c] font-semibold" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.cost}</span>
+                    <span className="text-[#484f58] hidden sm:inline" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.tokens}</span>
+                    <span className="text-[#30363d]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{q.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="pricing" className="bg-white py-28">
+      <section id="how-it-works" className="py-32" style={{ background: 'linear-gradient(180deg, rgba(255,140,60,0.03) 0%, transparent 100%)' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <p className="text-[11px] text-[#ff8c3c] uppercase tracking-[5px] mb-5 font-semibold">How It Works</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
+              Up and running in 2 minutes
+            </h2>
+            <p className="text-lg text-[#8b949e] max-w-lg mx-auto">
+              No infrastructure changes. No new dependencies. Just wrap your client and go.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+            {[
+              { num: '01', title: 'Sign up & get your key', desc: 'Create a free account and grab your API key from the dashboard.', color: '#ff8c3c' },
+              { num: '02', title: 'Wrap your AI client', desc: 'Install the SDK and wrap your existing OpenAI, Anthropic, or Google client in one line.', color: '#4285f4' },
+              { num: '03', title: 'Watch costs appear', desc: 'Every API call is tracked automatically. Your dashboard shows cost, tokens, and latency in real time.', color: '#28c840' },
+            ].map((step, i) => (
+              <div key={step.num} className="relative">
+                {i < 2 && <div className="hidden md:block absolute top-8 right-0 w-6 h-px" style={{ background: 'rgba(255,255,255,0.1)' }}></div>}
+                <div className="rounded-2xl p-8 h-full" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ background: `${step.color}15`, border: `1px solid ${step.color}30` }}>
+                    <span className="text-sm font-bold" style={{ color: step.color, fontFamily: 'var(--font-jetbrains), monospace' }}>{step.num}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-3">{step.title}</h3>
+                  <p className="text-sm text-[#8b949e] leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <div className="rounded-2xl overflow-hidden" style={{ background: '#161b22', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 25px 50px rgba(0,0,0,0.5)' }}>
+              <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }}></div>
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }}></div>
+                  <div className="w-3 h-3 rounded-full" style={{ background: '#28c840' }}></div>
+                </div>
+                <span className="text-[11px] text-[#484f58]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>your-app.ts</span>
+                <div className="w-16"></div>
+              </div>
+              <div className="p-6 sm:p-8" style={{ fontFamily: 'var(--font-jetbrains), monospace', fontSize: '13px', lineHeight: '2.2' }}>
+                <div className="text-[#484f58]">{'// npm install @truecompute/sdk'}</div>
+                <div className="mt-3">
+                  <span className="text-[#ff7b72]">import</span>{' '}
+                  <span className="text-[#c9d1d9]">{'{ TrueCompute }'}</span>{' '}
+                  <span className="text-[#ff7b72]">from</span>{' '}
+                  <span className="text-[#a5d6ff]">{`'@truecompute/sdk'`}</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-[#ff7b72]">const</span>{' '}
+                  <span className="text-[#c9d1d9]">tc</span>{' = '}
+                  <span className="text-[#ff7b72]">new</span>{' '}
+                  <span className="text-[#d2a8ff]">TrueCompute</span>
+                  <span className="text-[#8b949e]">{'({ apiKey: '}</span>
+                  <span className="text-[#a5d6ff]">{`'tc_live_...'`}</span>
+                  <span className="text-[#8b949e]">{' })'}</span>
+                </div>
+                <div>
+                  <span className="text-[#ff7b72]">const</span>{' '}
+                  <span className="text-[#c9d1d9]">openai</span>{' = '}
+                  <span className="text-[#c9d1d9]">tc.wrap</span>
+                  <span className="text-[#8b949e]">(</span>
+                  <span className="text-[#ff7b72]">new</span>{' '}
+                  <span className="text-[#d2a8ff]">OpenAI</span>
+                  <span className="text-[#8b949e]">())</span>
+                </div>
+                <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <span className="text-[#484f58]">{'// Use as normal — every call is tracked automatically'}</span>
+                </div>
+                <div>
+                  <span className="text-[#ff7b72]">const</span>{' '}
+                  <span className="text-[#c9d1d9]">res</span>{' = '}
+                  <span className="text-[#ff7b72]">await</span>{' '}
+                  <span className="text-[#c9d1d9]">openai.chat.completions.create</span>
+                  <span className="text-[#8b949e]">({'{ ... }'})</span>
+                </div>
+                <div className="mt-4 pt-4 flex items-center gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-[#28c840]">Dashboard: $0.0043 &middot; 1,247 tokens &middot; 892ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="py-32">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-[11px] text-[#bbb] uppercase tracking-[4px] mb-4" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Pricing</p>
-            <h2 className="text-3xl sm:text-4xl font-light text-[#1a1a1a] mb-3" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', letterSpacing: '-1px' }}>
+          <div className="text-center mb-20">
+            <p className="text-[11px] text-[#ff8c3c] uppercase tracking-[5px] mb-5 font-semibold">Pricing</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
               Simple, transparent pricing
             </h2>
-            <p className="text-sm text-[#999]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-              Start free. Upgrade when you&apos;re ready.
-            </p>
+            <p className="text-lg text-[#8b949e]">Start free. Scale when you&apos;re ready.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-7 transition-all ${
-                  plan.highlighted
-                    ? 'bg-[#1a1a1a] text-white shadow-xl relative scale-[1.02]'
-                    : 'bg-[#FAFAF8] border border-[#f0ede8]'
-                }`}
+                className={`rounded-2xl p-8 transition-all relative ${plan.highlighted ? 'md:scale-[1.04]' : ''}`}
+                style={{
+                  background: plan.highlighted
+                    ? 'linear-gradient(135deg, rgba(255,140,60,0.08), rgba(255,140,60,0.02))'
+                    : 'rgba(255,255,255,0.02)',
+                  border: plan.highlighted
+                    ? '1px solid rgba(255,140,60,0.3)'
+                    : '1px solid rgba(255,255,255,0.06)',
+                }}
               >
                 {plan.highlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-emerald-500 text-white">
-                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Most Popular</span>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                    style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}>
+                    Most Popular
                   </div>
                 )}
-                <h3 className={`text-xl ${plan.highlighted ? 'text-white' : 'text-[#1a1a1a]'}`} style={{ fontFamily: 'var(--font-cormorant), Georgia, serif' }}>{plan.name}</h3>
-                <p className={`text-xs mt-1 mb-5 ${plan.highlighted ? 'text-[#888]' : 'text-[#999]'}`} style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{plan.desc}</p>
-                <div className="flex items-baseline gap-1 mb-7">
-                  <span className={`text-4xl font-bold ${plan.highlighted ? 'text-white' : 'text-[#1a1a1a]'}`} style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{plan.price}</span>
-                  <span className={`text-sm ${plan.highlighted ? 'text-[#666]' : 'text-[#bbb]'}`} style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>/mo</span>
+                <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                <p className="text-xs text-[#484f58] mt-1 mb-5">{plan.desc}</p>
+                <div className="flex items-baseline gap-1 mb-8">
+                  <span className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{plan.price}</span>
+                  <span className="text-sm text-[#484f58]">/mo</span>
                 </div>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((f) => (
-                    <li key={f} className={`flex items-center gap-2.5 text-xs ${plan.highlighted ? 'text-[#aaa]' : 'text-[#888]'}`} style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-                      <span className="text-emerald-500">&#10003;</span> {f}
+                    <li key={f} className="flex items-center gap-2.5 text-[13px] text-[#8b949e]">
+                      <span className="text-emerald-400">&#10003;</span> {f}
                     </li>
                   ))}
                 </ul>
                 <Link
                   href="/signup"
-                  className={`block w-full px-4 py-3 font-medium text-sm rounded-full text-center transition-all ${
+                  className={`block w-full py-3.5 font-semibold text-sm rounded-full text-center transition-all ${
                     plan.highlighted
-                      ? 'bg-white text-[#1a1a1a] hover:bg-[#f0f0f0]'
-                      : 'bg-[#1a1a1a] text-white hover:bg-[#333]'
+                      ? 'hover:shadow-[0_0_25px_rgba(255,140,60,0.3)] hover:scale-[1.02]'
+                      : 'hover:bg-[rgba(255,255,255,0.08)]'
                   }`}
-                  style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
+                  style={{
+                    background: plan.highlighted ? 'linear-gradient(135deg, #ff8c3c, #ff6b1a)' : 'rgba(255,255,255,0.06)',
+                    color: plan.highlighted ? '#fff' : '#c9d1d9',
+                    border: plan.highlighted ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                  }}
                 >
                   {plan.name === 'Free' ? 'Get Started Free' : plan.name === 'Enterprise' ? 'Contact Sales' : 'Start Pro Trial'}
                 </Link>
@@ -434,39 +512,44 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="max-w-4xl mx-auto px-6 py-28 text-center">
-        <h2 className="text-3xl sm:text-4xl font-light text-[#1a1a1a] mb-4" style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', letterSpacing: '-1px' }}>
-          Your AI bill shouldn&apos;t be a mystery
-        </h2>
-        <p className="text-sm text-[#999] mb-10 max-w-md mx-auto" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-          Sign up in 30 seconds. Add 3 lines of code.
-          See your first cost report before your coffee gets cold.
-        </p>
-        <Link
-          href="/signup"
-          className="inline-block px-12 py-4 bg-[#1a1a1a] text-white font-medium text-sm rounded-full hover:bg-[#333] transition-all hover:shadow-lg"
-          style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
-        >
-          Create Free Account
-        </Link>
+      <section className="py-32">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="rounded-3xl p-12 sm:p-20 relative overflow-hidden" style={{
+            background: 'linear-gradient(135deg, rgba(255,140,60,0.1), rgba(255,107,26,0.05))',
+            border: '1px solid rgba(255,140,60,0.15)',
+          }}>
+            <div className="absolute inset-0 hero-glow opacity-50"></div>
+            <div className="relative z-10">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
+                Your AI bill shouldn&apos;t<br />be a mystery
+              </h2>
+              <p className="text-[#8b949e] mb-10 max-w-md mx-auto leading-relaxed">
+                Sign up in 30 seconds. Add 3 lines of code. See your first cost report before your coffee gets cold.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/signup"
+                  className="px-10 py-4 text-sm font-semibold rounded-full transition-all hover:shadow-[0_0_30px_rgba(255,140,60,0.35)] hover:scale-[1.02]"
+                  style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}
+                >
+                  Create Free Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <footer className="border-t border-[#f0ede8] py-8 bg-white">
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <span className="text-xs text-[#ccc]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-            TrueCompute &copy; {new Date().getFullYear()}
-          </span>
-          <div className="flex gap-6">
-            <a href="#how-it-works" className="text-xs text-[#ccc] hover:text-[#666] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-              How It Works
-            </a>
-            <a href="#pricing" className="text-xs text-[#ccc] hover:text-[#666] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-              Pricing
-            </a>
-            <Link href="/login" className="text-xs text-[#ccc] hover:text-[#666] transition-colors" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
-              Sign In
-            </Link>
+      <footer className="py-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="text-sm font-bold text-[#30363d]">TrueCompute</span>
+          <div className="flex gap-8">
+            <a href="#features" className="text-xs text-[#484f58] hover:text-[#8b949e] transition-colors">Features</a>
+            <a href="#how-it-works" className="text-xs text-[#484f58] hover:text-[#8b949e] transition-colors">How It Works</a>
+            <a href="#pricing" className="text-xs text-[#484f58] hover:text-[#8b949e] transition-colors">Pricing</a>
+            <Link href="/login" className="text-xs text-[#484f58] hover:text-[#8b949e] transition-colors">Sign In</Link>
           </div>
+          <span className="text-xs text-[#30363d]">&copy; {new Date().getFullYear()} TrueCompute</span>
         </div>
       </footer>
     </div>
