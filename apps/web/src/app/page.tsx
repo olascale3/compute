@@ -516,35 +516,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="pt-20 pb-40">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <div className="rounded-3xl p-16 sm:p-20 relative overflow-hidden" style={{
-            background: 'linear-gradient(135deg, rgba(255,140,60,0.1), rgba(255,107,26,0.05))',
-            border: '1px solid rgba(255,140,60,0.15)',
-          }}>
-            <div className="absolute inset-0 hero-glow opacity-50"></div>
-            <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
-                Your AI bill shouldn&apos;t<br />be a mystery
-              </h2>
-              <p className="text-[#8b949e] mb-12 max-w-md mx-auto leading-relaxed">
-                Sign up in 30 seconds. Add 3 lines of code. See your first cost report before your coffee gets cold.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/signup"
-                  className="px-10 py-4 text-sm font-semibold rounded-full transition-all hover:shadow-[0_0_30px_rgba(255,140,60,0.35)] hover:scale-[1.02]"
-                  style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}
-                >
-                  Create Free Account
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="py-16" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <footer className="py-16 mt-20" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <span className="text-sm font-bold text-[#30363d]">TrueCompute</span>
           <div className="flex gap-8">
