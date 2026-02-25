@@ -242,9 +242,8 @@ export default function LandingPage() {
               title: 'Real-Time Cost Tracking',
               desc: 'See exactly what each API call costs the moment it happens. Per-query precision down to the fraction of a cent across every provider and model.',
               icon: (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#ff8c3c"/><stop offset="1" stopColor="#ffcb8e"/></linearGradient></defs>
-                  <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#ff8c3c"/>
                 </svg>
               ),
               gradient: 'rgba(255,140,60,0.06)',
@@ -253,9 +252,11 @@ export default function LandingPage() {
               title: 'Multi-Provider Dashboard',
               desc: 'Stop tab-switching between billing pages. OpenAI, Anthropic, Google, DeepSeek, Mistral and 15+ providers unified in a single view.',
               icon: (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <defs><linearGradient id="g2" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#4285f4"/><stop offset="1" stopColor="#7eb8f0"/></linearGradient></defs>
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1" stroke="#4285f4"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1" stroke="#4285f4"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1" stroke="#4285f4"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1" stroke="#4285f4"/>
                 </svg>
               ),
               gradient: 'rgba(66,133,244,0.06)',
@@ -264,9 +265,10 @@ export default function LandingPage() {
               title: 'Budget Alerts & Limits',
               desc: 'Set monthly spending caps and get notified at 80% usage. Never be surprised by your AI bill again. Protect your budget automatically.',
               icon: (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <defs><linearGradient id="g3" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#28c840"/><stop offset="1" stopColor="#6ee7b7"/></linearGradient></defs>
-                  <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#28c840"/>
+                  <line x1="12" y1="9" x2="12" y2="13" stroke="#28c840"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17" stroke="#28c840"/>
                 </svg>
               ),
               gradient: 'rgba(40,200,64,0.06)',
@@ -275,9 +277,10 @@ export default function LandingPage() {
               title: 'Zero-Overhead SDK',
               desc: 'Three lines of code. No latency impact. Telemetry fires asynchronously in the background. Your application performance stays untouched.',
               icon: (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#g4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <defs><linearGradient id="g4" x1="0" y1="0" x2="24" y2="24"><stop stopColor="#febc2e"/><stop offset="1" stopColor="#fcd34d"/></linearGradient></defs>
-                  <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 18 22 12 16 6" stroke="#febc2e"/>
+                  <polyline points="8 6 2 12 8 18" stroke="#febc2e"/>
+                  <line x1="14" y1="4" x2="10" y2="20" stroke="#febc2e" opacity="0.5"/>
                 </svg>
               ),
               gradient: 'rgba(254,188,46,0.06)',
