@@ -465,7 +465,7 @@ export default function LandingPage() {
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-8 transition-all relative ${plan.highlighted ? 'md:scale-[1.04]' : ''}`}
+                className={`rounded-2xl p-10 transition-all relative ${plan.highlighted ? 'md:scale-[1.04]' : ''}`}
                 style={{
                   background: plan.highlighted
                     ? 'linear-gradient(135deg, rgba(255,140,60,0.08), rgba(255,140,60,0.02))'
@@ -482,12 +482,12 @@ export default function LandingPage() {
                   </div>
                 )}
                 <h3 className="text-xl font-bold text-white">{plan.name}</h3>
-                <p className="text-xs text-[#484f58] mt-1 mb-5">{plan.desc}</p>
-                <div className="flex items-baseline gap-1 mb-8">
+                <p className="text-xs text-[#484f58] mt-2 mb-6">{plan.desc}</p>
+                <div className="flex items-baseline gap-1 mb-10">
                   <span className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{plan.price}</span>
                   <span className="text-sm text-[#484f58]">/mo</span>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-4 mb-10">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2.5 text-[13px] text-[#8b949e]">
                       <span className="text-emerald-400">&#10003;</span> {f}
