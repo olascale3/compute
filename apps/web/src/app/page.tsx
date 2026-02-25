@@ -88,14 +88,14 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="relative pt-48 pb-8 hero-glow">
+      <section className="relative pb-8 hero-glow" style={{ paddingTop: 'calc(64px + 3rem)' }}>
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-10" style={{ background: 'rgba(255,140,60,0.08)', border: '1px solid rgba(255,140,60,0.15)' }}>
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-8" style={{ background: 'rgba(255,140,60,0.08)', border: '1px solid rgba(255,140,60,0.15)' }}>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="text-[13px] text-[#8b949e]">Now tracking 15+ AI providers in real time</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] mb-8 tracking-tight" style={{ fontFamily: 'var(--font-inter), system-ui, -apple-system, sans-serif' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.08] mb-8 tracking-tight" style={{ fontFamily: 'var(--font-inter), system-ui, -apple-system, sans-serif' }}>
             <span className="text-white">Know what your AI</span>
             <br />
             <span className="shimmer-text">actually costs</span>
