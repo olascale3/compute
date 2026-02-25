@@ -451,9 +451,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="pricing" className="py-32">
+      <section id="pricing" className="pt-40 pb-20">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <p className="text-[11px] text-[#ff8c3c] uppercase tracking-[5px] mb-5 font-semibold">Pricing</p>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
               Simple, transparent pricing
@@ -461,11 +461,11 @@ export default function LandingPage() {
             <p className="text-lg text-[#8b949e]">Start free. Scale when you&apos;re ready.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-10 transition-all relative ${plan.highlighted ? 'md:scale-[1.04]' : ''}`}
+                className={`rounded-2xl transition-all relative flex flex-col ${plan.highlighted ? 'md:scale-[1.04] pt-14 pb-10 px-8' : 'pt-10 pb-10 px-8'}`}
                 style={{
                   background: plan.highlighted
                     ? 'linear-gradient(135deg, rgba(255,140,60,0.08), rgba(255,140,60,0.02))'
@@ -476,21 +476,22 @@ export default function LandingPage() {
                 }}
               >
                 {plan.highlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap"
                     style={{ background: 'linear-gradient(135deg, #ff8c3c, #ff6b1a)', color: '#fff' }}>
                     Most Popular
                   </div>
                 )}
                 <h3 className="text-xl font-bold text-white">{plan.name}</h3>
-                <p className="text-xs text-[#484f58] mt-2 mb-6">{plan.desc}</p>
-                <div className="flex items-baseline gap-1 mb-10">
+                <p className="text-xs text-[#484f58] mt-2 mb-8">{plan.desc}</p>
+                <div className="flex items-baseline gap-1 mb-8">
                   <span className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>{plan.price}</span>
                   <span className="text-sm text-[#484f58]">/mo</span>
                 </div>
-                <ul className="space-y-4 mb-10">
+                <div className="w-full h-px mb-8" style={{ background: 'rgba(255,255,255,0.06)' }}></div>
+                <ul className="space-y-4 mb-auto pb-10 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-[13px] text-[#8b949e]">
-                      <span className="text-emerald-400">&#10003;</span> {f}
+                    <li key={f} className="flex items-center gap-3 text-[13px] text-[#8b949e]">
+                      <span className="text-emerald-400 shrink-0">&#10003;</span> {f}
                     </li>
                   ))}
                 </ul>
@@ -515,18 +516,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-32">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="rounded-3xl p-12 sm:p-20 relative overflow-hidden" style={{
+      <section className="pt-20 pb-40">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <div className="rounded-3xl p-16 sm:p-20 relative overflow-hidden" style={{
             background: 'linear-gradient(135deg, rgba(255,140,60,0.1), rgba(255,107,26,0.05))',
             border: '1px solid rgba(255,140,60,0.15)',
           }}>
             <div className="absolute inset-0 hero-glow opacity-50"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-5">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
                 Your AI bill shouldn&apos;t<br />be a mystery
               </h2>
-              <p className="text-[#8b949e] mb-10 max-w-md mx-auto leading-relaxed">
+              <p className="text-[#8b949e] mb-12 max-w-md mx-auto leading-relaxed">
                 Sign up in 30 seconds. Add 3 lines of code. See your first cost report before your coffee gets cold.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -543,8 +544,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="py-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="py-16" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <span className="text-sm font-bold text-[#30363d]">TrueCompute</span>
           <div className="flex gap-8">
             <a href="#features" className="text-xs text-[#484f58] hover:text-[#8b949e] transition-colors">Features</a>
